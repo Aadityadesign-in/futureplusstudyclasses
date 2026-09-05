@@ -1,0 +1,1177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="theme-color"
+        content="#2563eb"
+    >
+
+    <title>Fee Management | Future Plus Study Classes</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            background: #f5f7fb;
+            color: #1f2937;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        button,
+        input,
+        select,
+        textarea {
+            font: inherit;
+        }
+
+
+        /* =========================================
+           HEADER
+           ========================================= */
+
+        .header {
+            background: #ffffff;
+            border-bottom: 1px solid #e5e7eb;
+            padding: 14px 25px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand img {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .brand-text h2 {
+            font-size: 19px;
+            color: #111827;
+        }
+
+        .brand-text p {
+            font-size: 12px;
+            color: #6b7280;
+            margin-top: 3px;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+
+        /* =========================================
+           BUTTONS
+           ========================================= */
+
+        .btn {
+            border: none;
+            border-radius: 8px;
+            padding: 10px 15px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.2s ease;
+            background: #2563eb;
+            color: white;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: #64748b;
+        }
+
+        .btn-danger {
+            background: #dc2626;
+        }
+
+        .btn-small {
+            padding: 7px 10px;
+            font-size: 12px;
+            margin: 2px;
+        }
+
+        .danger {
+            background: #dc2626;
+            color: white;
+        }
+
+
+        /* =========================================
+           PAGE
+           ========================================= */
+
+        .container {
+            width: min(1400px, 94%);
+            margin: 30px auto;
+        }
+
+        .page-title {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .page-title h1 {
+            font-size: 28px;
+            color: #111827;
+        }
+
+        .page-title p {
+            color: #6b7280;
+            margin-top: 5px;
+            font-size: 14px;
+        }
+
+
+        /* =========================================
+           STATS
+           ========================================= */
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns:
+                repeat(4, minmax(0, 1fr));
+
+            gap: 18px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 22px;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.04);
+        }
+
+        .stat-card span {
+            display: block;
+            font-size: 13px;
+            color: #6b7280;
+            margin-bottom: 8px;
+        }
+
+        .stat-card strong {
+            font-size: 25px;
+        }
+
+        .blue {
+            color: #2563eb;
+        }
+
+        .green {
+            color: #16a34a;
+        }
+
+        .orange {
+            color: #ea580c;
+        }
+
+        .red {
+            color: #dc2626;
+        }
+
+
+        /* =========================================
+           FILTER CARD
+           ========================================= */
+
+        .filter-card {
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 14px;
+            padding: 18px;
+            margin-bottom: 20px;
+
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .filter-card input,
+        .filter-card select {
+            height: 42px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            padding: 0 12px;
+            outline: none;
+            background: white;
+        }
+
+        .filter-card input {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .filter-card input:focus,
+        .filter-card select:focus,
+        .form-control:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37,99,235,0.10);
+        }
+
+
+        /* =========================================
+           TABLE
+           ========================================= */
+
+        .table-card {
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.04);
+        }
+
+        .table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1050px;
+        }
+
+        th {
+            background: #f8fafc;
+            color: #475569;
+            font-size: 13px;
+            font-weight: 700;
+            text-align: left;
+            padding: 14px;
+            border-bottom: 1px solid #e5e7eb;
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 14px;
+            border-bottom: 1px solid #eef2f7;
+            font-size: 13px;
+            vertical-align: middle;
+        }
+
+        tr:hover td {
+            background: #fafafa;
+        }
+
+        td small {
+            color: #64748b;
+        }
+
+
+        /* =========================================
+           STATUS
+           ========================================= */
+
+        .status-badge {
+            display: inline-block;
+            padding: 5px 9px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .status-badge.green {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .status-badge.orange {
+            background: #ffedd5;
+            color: #9a3412;
+        }
+
+        .status-badge.red {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .status-badge.blue {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+
+        /* =========================================
+           MODAL
+           ========================================= */
+
+        .modal {
+            display: none;
+
+            position: fixed;
+            inset: 0;
+
+            background: rgba(15, 23, 42, 0.55);
+
+            align-items: center;
+            justify-content: center;
+
+            padding: 20px;
+
+            z-index: 1000;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            width: min(650px, 100%);
+            max-height: 92vh;
+            overflow-y: auto;
+
+            background: #ffffff;
+            border-radius: 16px;
+
+            box-shadow:
+                0 20px 60px rgba(0,0,0,0.20);
+        }
+
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid #e5e7eb;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .modal-header h2 {
+            font-size: 20px;
+        }
+
+        .close-btn {
+            width: 35px;
+            height: 35px;
+
+            border: none;
+            border-radius: 50%;
+
+            background: #f1f5f9;
+            color: #334155;
+
+            cursor: pointer;
+            font-size: 20px;
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+
+        /* =========================================
+           FORM
+           ========================================= */
+
+        .form-group {
+            margin-bottom: 17px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 7px;
+            font-size: 13px;
+            font-weight: 700;
+            color: #374151;
+        }
+
+        .form-control {
+            width: 100%;
+            height: 44px;
+
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+
+            padding: 0 12px;
+            outline: none;
+
+            background: #ffffff;
+        }
+
+        textarea.form-control {
+            height: 90px;
+            padding: 11px 12px;
+            resize: vertical;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+
+        /* =========================================
+           AMOUNT PREVIEW
+           ========================================= */
+
+        .amount-preview {
+            display: grid;
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 12px;
+
+            margin: 20px 0;
+
+            padding: 15px;
+
+            background: #f8fafc;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+        }
+
+        .preview-box {
+            text-align: center;
+        }
+
+        .preview-box span {
+            display: block;
+            font-size: 11px;
+            color: #64748b;
+            margin-bottom: 5px;
+        }
+
+        .preview-box strong {
+            font-size: 18px;
+        }
+
+
+        /* =========================================
+           MODAL FOOTER
+           ========================================= */
+
+        .modal-footer {
+            padding: 16px 20px;
+
+            border-top: 1px solid #e5e7eb;
+
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+
+        /* =========================================
+           EMPTY
+           ========================================= */
+
+        .empty-message {
+            text-align: center;
+            padding: 40px !important;
+            color: #64748b;
+        }
+
+
+        /* =========================================
+           MOBILE
+           ========================================= */
+
+        @media (max-width: 900px) {
+
+            .stats-grid {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+        }
+
+
+        @media (max-width: 600px) {
+
+            .header {
+                padding: 12px 15px;
+            }
+
+            .brand-text h2 {
+                font-size: 15px;
+            }
+
+            .brand img {
+                width: 40px;
+                height: 40px;
+            }
+
+            .header-actions .btn {
+                padding: 8px 10px;
+                font-size: 12px;
+            }
+
+            .container {
+                width: 94%;
+                margin: 20px auto;
+            }
+
+            .page-title {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .page-title h1 {
+                font-size: 23px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+            }
+
+            .stat-card {
+                padding: 15px;
+            }
+
+            .stat-card strong {
+                font-size: 20px;
+            }
+
+            .filter-card {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .filter-card input {
+                min-width: 0;
+                width: 100%;
+            }
+
+            .filter-card select,
+            .filter-card button {
+                width: 100%;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .amount-preview {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+    </style>
+</head>
+
+
+<body>
+
+
+    <!-- =========================================
+         HEADER
+         ========================================= -->
+
+    <header class="header">
+
+        <div class="brand">
+
+            <img
+                src="../assets/images/logo.jpg"
+                alt="Future Plus Study Classes Logo"
+            >
+
+            <div class="brand-text">
+
+                <h2>
+                    Future Plus Study Classes
+                </h2>
+
+                <p>
+                    Admin Fee Management
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="header-actions">
+
+            <a
+                href="dashboard.html"
+                class="btn btn-secondary"
+            >
+                🏠 Dashboard
+            </a>
+
+            <button
+                type="button"
+                id="logoutBtn"
+                class="btn btn-danger"
+            >
+                Logout
+            </button>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- =========================================
+         MAIN
+         ========================================= -->
+
+    <main class="container">
+
+
+        <!-- PAGE TITLE -->
+
+        <div class="page-title">
+
+            <div>
+
+                <h1>
+                    💰 Fee Management
+                </h1>
+
+                <p>
+                    Manage student fees, payments and pending dues.
+                </p>
+
+            </div>
+
+
+            <button
+                type="button"
+                id="addFeeBtn"
+                class="btn"
+            >
+                ➕ Add Fee
+            </button>
+
+        </div>
+
+
+
+        <!-- =====================================
+             STATS
+             ===================================== -->
+
+        <section class="stats-grid">
+
+
+            <div class="stat-card">
+
+                <span>
+                    Total Fee
+                </span>
+
+                <strong
+                    id="totalFee"
+                    class="blue"
+                >
+                    ₹0
+                </strong>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <span>
+                    Total Paid
+                </span>
+
+                <strong
+                    id="totalPaid"
+                    class="green"
+                >
+                    ₹0
+                </strong>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <span>
+                    Total Due
+                </span>
+
+                <strong
+                    id="totalDue"
+                    class="orange"
+                >
+                    ₹0
+                </strong>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <span>
+                    Total Overdue
+                </span>
+
+                <strong
+                    id="totalOverdue"
+                    class="red"
+                >
+                    ₹0
+                </strong>
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- =====================================
+             FILTERS
+             ===================================== -->
+
+        <section class="filter-card">
+
+
+            <input
+                type="search"
+                id="searchInput"
+                placeholder="🔎 Search student, phone, email or fee type..."
+            >
+
+
+            <select id="statusFilter">
+
+                <option value="all">
+                    All Status
+                </option>
+
+                <option value="pending">
+                    Pending
+                </option>
+
+                <option value="partial">
+                    Partial
+                </option>
+
+                <option value="paid">
+                    Paid
+                </option>
+
+                <option value="overdue">
+                    Overdue
+                </option>
+
+            </select>
+
+
+            <button
+                type="button"
+                id="refreshBtn"
+                class="btn"
+            >
+                ↻ Refresh
+            </button>
+
+
+        </section>
+
+
+
+        <!-- =====================================
+             FEES TABLE
+             ===================================== -->
+
+        <section class="table-card">
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Student
+                            </th>
+
+                            <th>
+                                Fee Type
+                            </th>
+
+                            <th>
+                                Total
+                            </th>
+
+                            <th>
+                                Paid
+                            </th>
+
+                            <th>
+                                Due
+                            </th>
+
+                            <th>
+                                Due Date
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                            <th>
+                                Note
+                            </th>
+
+                            <th>
+                                Actions
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody id="feesTableBody">
+
+                        <tr>
+
+                            <td
+                                colspan="9"
+                                class="empty-message"
+                            >
+                                Loading fee records...
+
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+
+
+    <!-- =========================================
+         ADD / EDIT FEE MODAL
+         ========================================= -->
+
+    <div
+        id="feeModal"
+        class="modal"
+    >
+
+        <div class="modal-content">
+
+
+            <!-- MODAL HEADER -->
+
+            <div class="modal-header">
+
+                <h2 id="modalTitle">
+                    ➕ Add Fee
+                </h2>
+
+                <button
+                    type="button"
+                    id="closeModalBtn"
+                    class="close-btn"
+                    aria-label="Close"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+
+            <!-- MODAL BODY -->
+
+            <form
+                id="feeForm"
+            >
+
+                <div class="modal-body">
+
+
+                    <!-- STUDENT -->
+
+                    <div class="form-group">
+
+                        <label for="studentId">
+                            Student *
+                        </label>
+
+                        <select
+                            id="studentId"
+                            class="form-control"
+                            required
+                        >
+
+                            <option value="">
+                                Select Student
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+
+                    <!-- FEE TYPE -->
+
+                    <div class="form-group">
+
+                        <label for="feeType">
+                            Fee Type *
+                        </label>
+
+                        <input
+                            type="text"
+                            id="feeType"
+                            class="form-control"
+                            placeholder="Example: Monthly Tuition Fee"
+                            required
+                        >
+
+                    </div>
+
+
+
+                    <!-- AMOUNT -->
+
+                    <div class="form-row">
+
+
+                        <div class="form-group">
+
+                            <label for="amount">
+                                Total Amount *
+                            </label>
+
+                            <input
+                                type="number"
+                                id="amount"
+                                class="form-control"
+                                min="0"
+                                step="0.01"
+                                placeholder="₹0"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="paidAmount">
+                                Paid Amount
+                            </label>
+
+                            <input
+                                type="number"
+                                id="paidAmount"
+                                class="form-control"
+                                min="0"
+                                step="0.01"
+                                value="0"
+                                placeholder="₹0"
+                            >
+
+                        </div>
+
+
+                    </div>
+
+
+
+                    <!-- DUE DATE -->
+
+                    <div class="form-group">
+
+                        <label for="dueDate">
+                            Due Date
+                        </label>
+
+                        <input
+                            type="date"
+                            id="dueDate"
+                            class="form-control"
+                        >
+
+                    </div>
+
+
+
+                    <!-- NOTE -->
+
+                    <div class="form-group">
+
+                        <label for="note">
+                            Note
+                        </label>
+
+                        <textarea
+                            id="note"
+                            class="form-control"
+                            placeholder="Optional note..."
+                        ></textarea>
+
+                    </div>
+
+
+
+                    <!-- =================================
+                         AMOUNT PREVIEW
+                         ================================= -->
+
+                    <div class="amount-preview">
+
+
+                        <div class="preview-box">
+
+                            <span>
+                                Total Amount
+                            </span>
+
+                            <strong
+                                id="previewAmount"
+                                class="blue"
+                            >
+                                ₹0
+                            </strong>
+
+                        </div>
+
+
+                        <div class="preview-box">
+
+                            <span>
+                                Paid Amount
+                            </span>
+
+                            <strong
+                                id="previewPaid"
+                                class="green"
+                            >
+                                ₹0
+                            </strong>
+
+                        </div>
+
+
+                        <div class="preview-box">
+
+                            <span>
+                                Remaining Due
+                            </span>
+
+                            <strong
+                                id="previewDue"
+                                class="orange"
+                            >
+                                ₹0
+                            </strong>
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- MODAL FOOTER -->
+
+                <div class="modal-footer">
+
+                    <button
+                        type="button"
+                        id="cancelBtn"
+                        class="btn btn-secondary"
+                    >
+                        Cancel
+                    </button>
+
+
+                    <button
+                        type="submit"
+                        id="saveFeeBtn"
+                        class="btn"
+                    >
+                        Save Fee
+                    </button>
+
+                </div>
+
+
+            </form>
+
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =========================================
+         SCRIPTS
+         ========================================= -->
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script src="../assets/js/supabase.js"></script>
+
+    <script src="../assets/js/fees-admin.js"></script>
+
+
+</body>
+</html>
