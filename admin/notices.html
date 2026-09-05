@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Notice Management | Future Plus Study Classes
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="../assets/css/style.css"
+    >
+
+    <style>
+
+        body {
+            background: #f5f7fb;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .admin-header {
+
+            background: white;
+
+            padding: 15px 25px;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            box-shadow:
+                0 2px 10px
+                rgba(0,0,0,0.08);
+
+        }
+
+        .brand {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+        }
+
+        .brand img {
+
+            width: 55px;
+
+            height: 55px;
+
+            border-radius: 50%;
+
+            object-fit: cover;
+
+        }
+
+        .brand h2 {
+
+            margin: 0;
+
+            font-size: 20px;
+
+        }
+
+        .logout-btn {
+
+            border: none;
+
+            background: #dc2626;
+
+            color: white;
+
+            padding: 10px 18px;
+
+            border-radius: 8px;
+
+            cursor: pointer;
+
+        }
+
+        .container {
+
+            max-width: 1200px;
+
+            margin: auto;
+
+            padding: 25px;
+
+        }
+
+        .top-bar {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 20px;
+
+            gap: 15px;
+
+        }
+
+        .top-bar h1 {
+
+            margin: 0;
+
+        }
+
+        .add-btn {
+
+            background: #2563eb;
+
+            color: white;
+
+            border: none;
+
+            padding: 12px 18px;
+
+            border-radius: 8px;
+
+            cursor: pointer;
+
+            font-weight: 600;
+
+        }
+
+        .stats {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 15px;
+
+            margin-bottom: 20px;
+
+        }
+
+        .stat-card {
+
+            background: white;
+
+            padding: 20px;
+
+            border-radius: 14px;
+
+            box-shadow:
+                0 4px 12px
+                rgba(0,0,0,0.06);
+
+        }
+
+        .stat-card span {
+
+            display: block;
+
+            color: #6b7280;
+
+            margin-bottom: 8px;
+
+        }
+
+        .stat-card strong {
+
+            font-size: 28px;
+
+        }
+
+        .table-card {
+
+            background: white;
+
+            border-radius: 14px;
+
+            padding: 20px;
+
+            overflow-x: auto;
+
+        }
+
+        table {
+
+            width: 100%;
+
+            border-collapse: collapse;
+
+        }
+
+        th,
+        td {
+
+            padding: 13px;
+
+            border-bottom:
+                1px solid #eee;
+
+            text-align: left;
+
+        }
+
+        th {
+
+            background: #f8fafc;
+
+        }
+
+        .badge {
+
+            padding: 5px 10px;
+
+            border-radius: 20px;
+
+            font-size: 12px;
+
+            font-weight: 600;
+
+        }
+
+        .active {
+
+            background: #dcfce7;
+
+            color: #166534;
+
+        }
+
+        .inactive {
+
+            background: #fee2e2;
+
+            color: #991b1b;
+
+        }
+
+        .action-btn {
+
+            border: none;
+
+            padding: 7px 11px;
+
+            border-radius: 6px;
+
+            cursor: pointer;
+
+            margin-right: 4px;
+
+        }
+
+        .edit-btn {
+
+            background: #dbeafe;
+
+            color: #1d4ed8;
+
+        }
+
+        .delete-btn {
+
+            background: #fee2e2;
+
+            color: #b91c1c;
+
+        }
+
+        .modal {
+
+            display: none;
+
+            position: fixed;
+
+            inset: 0;
+
+            background:
+                rgba(0,0,0,0.5);
+
+            align-items: center;
+
+            justify-content: center;
+
+            padding: 20px;
+
+            z-index: 1000;
+
+        }
+
+        .modal-content {
+
+            background: white;
+
+            width: 100%;
+
+            max-width: 550px;
+
+            border-radius: 15px;
+
+            padding: 25px;
+
+            max-height: 90vh;
+
+            overflow-y: auto;
+
+        }
+
+        .modal-content h2 {
+
+            margin-top: 0;
+
+        }
+
+        .form-group {
+
+            margin-bottom: 15px;
+
+        }
+
+        .form-group label {
+
+            display: block;
+
+            margin-bottom: 6px;
+
+            font-weight: 600;
+
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+
+            width: 100%;
+
+            box-sizing: border-box;
+
+            padding: 11px;
+
+            border: 1px solid #d1d5db;
+
+            border-radius: 8px;
+
+            font-size: 14px;
+
+        }
+
+        .form-group textarea {
+
+            min-height: 130px;
+
+            resize: vertical;
+
+        }
+
+        .modal-actions {
+
+            display: flex;
+
+            justify-content: flex-end;
+
+            gap: 10px;
+
+            margin-top: 20px;
+
+        }
+
+        .cancel-btn {
+
+            background: #e5e7eb;
+
+            border: none;
+
+            padding: 11px 18px;
+
+            border-radius: 8px;
+
+            cursor: pointer;
+
+        }
+
+        .save-btn {
+
+            background: #2563eb;
+
+            color: white;
+
+            border: none;
+
+            padding: 11px 18px;
+
+            border-radius: 8px;
+
+            cursor: pointer;
+
+        }
+
+        @media(max-width:700px) {
+
+            .stats {
+
+                grid-template-columns: 1fr;
+
+            }
+
+            .top-bar {
+
+                flex-direction: column;
+
+                align-items: stretch;
+
+            }
+
+            .brand h2 {
+
+                font-size: 15px;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<header class="admin-header">
+
+    <div class="brand">
+
+        <img
+            src="../assets/images/logo.jpg"
+            alt="Logo"
+        >
+
+        <div>
+
+            <h2>
+                Future Plus Study Classes
+            </h2>
+
+            <small>
+                Notice Management
+            </small>
+
+        </div>
+
+    </div>
+
+
+    <button
+        id="logoutBtn"
+        class="logout-btn"
+    >
+        Logout
+    </button>
+
+</header>
+
+
+<main class="container">
+
+
+    <div class="top-bar">
+
+        <div>
+
+            <h1>
+                📢 Notices & Announcements
+            </h1>
+
+            <p>
+                Manage student announcements.
+            </p>
+
+        </div>
+
+
+        <button
+            id="addNoticeBtn"
+            class="add-btn"
+        >
+            + Add Notice
+        </button>
+
+    </div>
+
+
+
+    <div class="stats">
+
+
+        <div class="stat-card">
+
+            <span>
+                Total Notices
+            </span>
+
+            <strong id="totalNotices">
+                0
+            </strong>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <span>
+                Active
+            </span>
+
+            <strong id="activeNotices">
+                0
+            </strong>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <span>
+                Inactive
+            </span>
+
+            <strong id="inactiveNotices">
+                0
+            </strong>
+
+        </div>
+
+
+    </div>
+
+
+
+    <div class="table-card">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Title
+                    </th>
+
+                    <th>
+                        Audience
+                    </th>
+
+                    <th>
+                        Status
+                    </th>
+
+                    <th>
+                        Date
+                    </th>
+
+                    <th>
+                        Actions
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody id="noticesTable">
+
+                <tr>
+
+                    <td colspan="5">
+                        Loading notices...
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+
+</main>
+
+
+
+<!-- MODAL -->
+
+<div
+    id="noticeModal"
+    class="modal"
+>
+
+    <div class="modal-content">
+
+        <h2 id="modalTitle">
+            Add Notice
+        </h2>
+
+
+        <input
+            type="hidden"
+            id="noticeId"
+        >
+
+
+        <div class="form-group">
+
+            <label>
+                Notice Title
+            </label>
+
+            <input
+                type="text"
+                id="noticeTitle"
+                placeholder="Example: Test on Sunday"
+            >
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>
+                Notice Message
+            </label>
+
+            <textarea
+                id="noticeMessage"
+                placeholder="Write your announcement..."
+            ></textarea>
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>
+                Audience
+            </label>
+
+            <select id="noticeAudience">
+
+                <option value="all">
+                    All Students
+                </option>
+
+                <option value="class">
+                    Specific Class
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div
+            class="form-group"
+            id="classGroup"
+            style="display:none;"
+        >
+
+            <label>
+                Class
+            </label>
+
+            <input
+                type="text"
+                id="noticeClass"
+                placeholder="Example: 12th"
+            >
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>
+                Status
+            </label>
+
+            <select id="noticeStatus">
+
+                <option value="active">
+                    Active
+                </option>
+
+                <option value="inactive">
+                    Inactive
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="modal-actions">
+
+            <button
+                id="cancelBtn"
+                class="cancel-btn"
+            >
+                Cancel
+            </button>
+
+            <button
+                id="saveBtn"
+                class="save-btn"
+            >
+                Save Notice
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<script
+    src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
+</script>
+
+<script src="../assets/js/supabase.js"></script>
+
+<script src="../assets/js/notices-admin.js"></script>
+
+
+</body>
+
+</html>
