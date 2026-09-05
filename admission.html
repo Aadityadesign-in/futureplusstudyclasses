@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="hi">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Admission Form - Future Plus</title>
+
+    <link
+        rel="stylesheet"
+        href="assets/css/style.css"
+    >
+
+</head>
+
+
+<body class="auth-page">
+
+
+<div class="auth-container">
+
+
+    <div class="auth-card admission-card">
+
+
+        <div class="auth-logo">
+
+            <img
+                src="assets/images/logo.jpg"
+                alt="Future Plus Logo"
+            >
+
+        </div>
+
+
+        <h1>Admission Form</h1>
+
+        <p class="auth-subtitle">
+            Future Plus Study CLASsES
+        </p>
+
+
+        <form id="admissionForm">
+
+
+            <label>
+                Student Name *
+            </label>
+
+            <input
+                type="text"
+                id="studentName"
+                required
+            >
+
+
+            <label>
+                Father's Name
+            </label>
+
+            <input
+                type="text"
+                id="fatherName"
+            >
+
+
+            <label>
+                Mother's Name
+            </label>
+
+            <input
+                type="text"
+                id="motherName"
+            >
+
+
+            <label>
+                Mobile Number *
+            </label>
+
+            <input
+                type="tel"
+                id="studentPhone"
+                required
+            >
+
+
+            <label>
+                Email
+            </label>
+
+            <input
+                type="email"
+                id="studentEmail"
+            >
+
+
+            <label>
+                Class
+            </label>
+
+            <select id="studentClass">
+
+                <option value="">
+                    Select Class
+                </option>
+
+                <option value="9th">
+                    Class 9th
+                </option>
+
+                <option value="10th">
+                    Class 10th
+                </option>
+
+                <option value="11th">
+                    Class 11th
+                </option>
+
+                <option value="12th">
+                    Class 12th
+                </option>
+
+            </select>
+
+
+            <label>
+                Course
+            </label>
+
+            <input
+                type="text"
+                id="studentCourse"
+                placeholder="Course / Subject"
+            >
+
+
+            <label>
+                Address
+            </label>
+
+            <textarea
+                id="studentAddress"
+                rows="3"
+                placeholder="अपना address लिखें"
+            ></textarea>
+
+
+            <label>
+                Message
+            </label>
+
+            <textarea
+                id="studentMessage"
+                rows="3"
+                placeholder="कोई अतिरिक्त जानकारी..."
+            ></textarea>
+
+
+            <button
+                type="submit"
+                class="auth-button"
+            >
+                Submit Admission Form
+            </button>
+
+
+        </form>
+
+
+        <div
+            id="admissionMessage"
+            class="auth-message"
+        ></div>
+
+
+        <div class="auth-links">
+
+            <a href="index.html">
+                ← Back to Website
+            </a>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+<script
+    src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+></script>
+
+<script src="assets/js/supabase.js"></script>
+
+
+<script>
+
+const form =
+    document.getElementById("admissionForm");
+
+
+form.addEventListener(
+    "submit",
+    async function(event) {
+
+        event.preventDefault();
+
+
+        const message =
+            document.getElementById(
+                "admissionMessage"
+            );
+
+
+        message.textContent =
+            "Application submit हो रही है...";
+
+
+        try {
+
+            const { error } =
+                await supabaseClient
+                    .from("admissions")
+                    .insert({
+
+                        student_name:
+                            document.getElementById(
+                                "studentName"
+                            ).value.trim(),
+
+                        father_name:
+                            document.getElementById(
+                                "fatherName"
+                            ).value.trim(),
+
+                        mother_name:
+                            document.getElementById(
+                                "motherName"
+                            ).value.trim(),
+
+                        phone:
+                            document.getElementById(
+                                "studentPhone"
+                            ).value.trim(),
+
+                        email:
+                            document.getElementById(
+                                "studentEmail"
+                            ).value.trim(),
+
+                        class_name:
+                            document.getElementById(
+                                "studentClass"
+                            ).value,
+
+                        course:
+                            document.getElementById(
+                                "studentCourse"
+                            ).value.trim(),
+
+                        address:
+                            document.getElementById(
+                                "studentAddress"
+                            ).value.trim(),
+
+                        message:
+                            document.getElementById(
+                                "studentMessage"
+                            ).value.trim()
+
+                    });
+
+
+            if (error) {
+                throw error;
+            }
+
+
+            message.textContent =
+                "✅ Admission application successfully submit हो गई है। Coaching आपको जल्द contact करेगी।";
+
+
+            form.reset();
+
+
+        } catch (error) {
+
+            console.error(error);
+
+            message.textContent =
+                "❌ Application submit नहीं हो सकी: " +
+                error.message;
+
+        }
+
+    }
+);
+
+</script>
+
+</body>
+
+</html>

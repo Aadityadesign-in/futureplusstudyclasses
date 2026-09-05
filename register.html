@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="hi">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Student Registration - Future Plus</title>
+
+    <link
+        rel="stylesheet"
+        href="assets/css/style.css"
+    >
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+    ></script>
+
+</head>
+
+
+<body class="auth-page">
+
+
+<div class="auth-container">
+
+
+    <div class="auth-card">
+
+
+        <div class="auth-logo">
+
+            <img
+                src="assets/images/logo.jpg"
+                alt="Future Plus Logo"
+            >
+
+        </div>
+
+
+        <h1>Student Registration</h1>
+
+        <p class="auth-subtitle">
+            अपना Student Account बनाएं
+        </p>
+
+
+        <form id="registerForm">
+
+
+            <label>
+                Full Name
+            </label>
+
+            <input
+                type="text"
+                id="registerName"
+                placeholder="पूरा नाम"
+                required
+            >
+
+
+            <label>
+                Mobile Number
+            </label>
+
+            <input
+                type="tel"
+                id="registerPhone"
+                placeholder="Mobile Number"
+                required
+            >
+
+
+            <label>
+                Email
+            </label>
+
+            <input
+                type="email"
+                id="registerEmail"
+                placeholder="Email Address"
+                required
+            >
+
+
+            <label>
+                Password
+            </label>
+
+            <input
+                type="password"
+                id="registerPassword"
+                placeholder="कम से कम 6 characters"
+                minlength="6"
+                required
+            >
+
+
+            <label>
+                Class
+            </label>
+
+            <select id="registerClass">
+
+                <option value="">
+                    Select Class
+                </option>
+
+                <option value="9th">
+                    Class 9th
+                </option>
+
+                <option value="10th">
+                    Class 10th
+                </option>
+
+                <option value="11th">
+                    Class 11th
+                </option>
+
+                <option value="12th">
+                    Class 12th
+                </option>
+
+            </select>
+
+
+            <button
+                type="submit"
+                class="auth-button"
+            >
+                Create Account
+            </button>
+
+
+        </form>
+
+
+        <div
+            id="registerMessage"
+            class="auth-message"
+        ></div>
+
+
+        <div class="auth-links">
+
+            <p>
+                पहले से account है?
+                <a href="login.html">
+                    Login करें
+                </a>
+            </p>
+
+            <a href="index.html">
+                ← Back to Website
+            </a>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="assets/js/supabase.js"></script>
+<script src="assets/js/auth.js"></script>
+
+</body>
+
+</html>
