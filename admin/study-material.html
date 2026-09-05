@@ -1,0 +1,1262 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="theme-color"
+        content="#2563eb"
+    >
+
+    <title>
+        Study Material | Future Plus Study Classes
+    </title>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            background: #f5f7fb;
+            color: #1f2937;
+        }
+
+        button,
+        input,
+        select,
+        textarea {
+            font: inherit;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+
+        /* ================================
+           HEADER
+           ================================ */
+
+        .header {
+            background: #ffffff;
+
+            border-bottom:
+                1px solid #e5e7eb;
+
+            padding: 14px 25px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            position: sticky;
+            top: 0;
+
+            z-index: 100;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand img {
+            width: 48px;
+            height: 48px;
+
+            object-fit: cover;
+
+            border-radius: 50%;
+        }
+
+        .brand-text h2 {
+            font-size: 19px;
+            color: #111827;
+        }
+
+        .brand-text p {
+            font-size: 12px;
+            color: #64748b;
+            margin-top: 3px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+
+        /* ================================
+           BUTTONS
+           ================================ */
+
+        .btn {
+            border: none;
+
+            border-radius: 8px;
+
+            padding: 10px 15px;
+
+            cursor: pointer;
+
+            font-weight: 600;
+
+            background: #2563eb;
+
+            color: #ffffff;
+
+            transition: 0.2s ease;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: #64748b;
+        }
+
+        .btn-danger {
+            background: #dc2626;
+        }
+
+        .btn-small {
+            padding: 7px 10px;
+            font-size: 12px;
+            margin: 2px;
+        }
+
+        .danger {
+            background: #dc2626;
+            color: white;
+        }
+
+
+        /* ================================
+           CONTAINER
+           ================================ */
+
+        .container {
+            width: min(1400px, 94%);
+
+            margin: 30px auto;
+        }
+
+
+        /* ================================
+           PAGE TITLE
+           ================================ */
+
+        .page-title {
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            gap: 15px;
+
+            margin-bottom: 25px;
+        }
+
+        .page-title h1 {
+            font-size: 28px;
+            color: #111827;
+        }
+
+        .page-title p {
+            margin-top: 5px;
+
+            font-size: 14px;
+
+            color: #64748b;
+        }
+
+
+        /* ================================
+           STATS
+           ================================ */
+
+        .stats-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, 1fr);
+
+            gap: 18px;
+
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: #ffffff;
+
+            border:
+                1px solid #e5e7eb;
+
+            border-radius: 14px;
+
+            padding: 22px;
+
+            box-shadow:
+                0 3px 12px rgba(0,0,0,0.04);
+        }
+
+        .stat-card span {
+            display: block;
+
+            font-size: 13px;
+
+            color: #64748b;
+
+            margin-bottom: 8px;
+        }
+
+        .stat-card strong {
+            font-size: 25px;
+        }
+
+        .blue {
+            color: #2563eb;
+        }
+
+        .green {
+            color: #16a34a;
+        }
+
+        .orange {
+            color: #ea580c;
+        }
+
+        .red {
+            color: #dc2626;
+        }
+
+
+        /* ================================
+           FILTERS
+           ================================ */
+
+        .filter-card {
+            background: #ffffff;
+
+            border:
+                1px solid #e5e7eb;
+
+            border-radius: 14px;
+
+            padding: 18px;
+
+            margin-bottom: 20px;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+            flex-wrap: wrap;
+        }
+
+        .filter-card input,
+        .filter-card select {
+            height: 42px;
+
+            border:
+                1px solid #d1d5db;
+
+            border-radius: 8px;
+
+            padding: 0 12px;
+
+            outline: none;
+
+            background: white;
+        }
+
+        .filter-card input {
+            flex: 1;
+
+            min-width: 250px;
+        }
+
+        .filter-card input:focus,
+        .filter-card select:focus,
+        .form-control:focus {
+            border-color: #2563eb;
+
+            box-shadow:
+                0 0 0 3px
+                rgba(37,99,235,0.10);
+        }
+
+
+        /* ================================
+           TABLE
+           ================================ */
+
+        .table-card {
+            background: #ffffff;
+
+            border:
+                1px solid #e5e7eb;
+
+            border-radius: 14px;
+
+            overflow: hidden;
+
+            box-shadow:
+                0 3px 12px rgba(0,0,0,0.04);
+        }
+
+        .table-wrapper {
+            width: 100%;
+
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+
+            border-collapse: collapse;
+
+            min-width: 1000px;
+        }
+
+        th {
+            background: #f8fafc;
+
+            color: #475569;
+
+            font-size: 13px;
+
+            font-weight: 700;
+
+            text-align: left;
+
+            padding: 14px;
+
+            border-bottom:
+                1px solid #e5e7eb;
+
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 14px;
+
+            border-bottom:
+                1px solid #eef2f7;
+
+            font-size: 13px;
+
+            vertical-align: middle;
+        }
+
+        tr:hover td {
+            background: #fafafa;
+        }
+
+        td small {
+            color: #64748b;
+        }
+
+
+        /* ================================
+           STATUS
+           ================================ */
+
+        .status-badge {
+            display: inline-block;
+
+            padding: 5px 9px;
+
+            border-radius: 999px;
+
+            font-size: 11px;
+
+            font-weight: 700;
+        }
+
+        .status-badge.green {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .status-badge.blue {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .status-badge.red {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+
+        /* ================================
+           MODAL
+           ================================ */
+
+        .modal {
+            display: none;
+
+            position: fixed;
+
+            inset: 0;
+
+            background:
+                rgba(15,23,42,0.55);
+
+            align-items: center;
+
+            justify-content: center;
+
+            padding: 20px;
+
+            z-index: 1000;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            width: min(650px, 100%);
+
+            max-height: 92vh;
+
+            overflow-y: auto;
+
+            background: #ffffff;
+
+            border-radius: 16px;
+
+            box-shadow:
+                0 20px 60px
+                rgba(0,0,0,0.20);
+        }
+
+        .modal-header {
+            padding: 20px;
+
+            border-bottom:
+                1px solid #e5e7eb;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            font-size: 20px;
+        }
+
+        .close-btn {
+            width: 35px;
+            height: 35px;
+
+            border: none;
+
+            border-radius: 50%;
+
+            background: #f1f5f9;
+
+            color: #334155;
+
+            cursor: pointer;
+
+            font-size: 20px;
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+
+        /* ================================
+           FORM
+           ================================ */
+
+        .form-group {
+            margin-bottom: 17px;
+        }
+
+        .form-group label {
+            display: block;
+
+            margin-bottom: 7px;
+
+            font-size: 13px;
+
+            font-weight: 700;
+
+            color: #374151;
+        }
+
+        .form-control {
+            width: 100%;
+
+            height: 44px;
+
+            border:
+                1px solid #d1d5db;
+
+            border-radius: 8px;
+
+            padding: 0 12px;
+
+            outline: none;
+
+            background: #ffffff;
+        }
+
+        textarea.form-control {
+            height: 100px;
+
+            padding: 11px 12px;
+
+            resize: vertical;
+        }
+
+        .form-row {
+            display: grid;
+
+            grid-template-columns:
+                1fr 1fr;
+
+            gap: 15px;
+        }
+
+
+        /* ================================
+           MODAL FOOTER
+           ================================ */
+
+        .modal-footer {
+            padding: 16px 20px;
+
+            border-top:
+                1px solid #e5e7eb;
+
+            display: flex;
+
+            justify-content: flex-end;
+
+            gap: 10px;
+        }
+
+
+        /* ================================
+           EMPTY
+           ================================ */
+
+        .empty-message {
+            text-align: center;
+
+            padding: 40px !important;
+
+            color: #64748b;
+        }
+
+
+        /* ================================
+           MOBILE
+           ================================ */
+
+        @media (max-width: 900px) {
+
+            .stats-grid {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+        }
+
+
+        @media (max-width: 600px) {
+
+            .header {
+                padding: 12px 15px;
+            }
+
+            .brand img {
+                width: 40px;
+                height: 40px;
+            }
+
+            .brand-text h2 {
+                font-size: 15px;
+            }
+
+            .brand-text p {
+                font-size: 10px;
+            }
+
+            .header-actions .btn {
+                padding: 8px 10px;
+
+                font-size: 12px;
+            }
+
+            .container {
+                width: 94%;
+
+                margin: 20px auto;
+            }
+
+            .page-title {
+                flex-direction: column;
+
+                align-items: flex-start;
+            }
+
+            .page-title h1 {
+                font-size: 23px;
+            }
+
+            .stats-grid {
+                grid-template-columns:
+                    1fr 1fr;
+
+                gap: 10px;
+            }
+
+            .stat-card {
+                padding: 15px;
+            }
+
+            .stat-card strong {
+                font-size: 20px;
+            }
+
+            .filter-card {
+                flex-direction: column;
+
+                align-items: stretch;
+            }
+
+            .filter-card input,
+            .filter-card select,
+            .filter-card button {
+                width: 100%;
+            }
+
+            .filter-card input {
+                min-width: 0;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =========================================
+         HEADER
+         ========================================= -->
+
+    <header class="header">
+
+        <div class="brand">
+
+            <img
+                src="../assets/images/logo.jpg"
+                alt="Future Plus Study Classes Logo"
+            >
+
+            <div class="brand-text">
+
+                <h2>
+                    Future Plus Study Classes
+                </h2>
+
+                <p>
+                    Study Material Management
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="header-actions">
+
+            <a
+                href="dashboard.html"
+                class="btn btn-secondary"
+            >
+                🏠 Dashboard
+            </a>
+
+            <button
+                type="button"
+                id="logoutBtn"
+                class="btn btn-danger"
+            >
+                Logout
+            </button>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- =========================================
+         MAIN
+         ========================================= -->
+
+    <main class="container">
+
+
+        <!-- PAGE TITLE -->
+
+        <div class="page-title">
+
+            <div>
+
+                <h1>
+                    📚 Study Material
+                </h1>
+
+                <p>
+                    Manage notes, PDFs, documents and useful study links.
+                </p>
+
+            </div>
+
+
+            <button
+                type="button"
+                id="addMaterialBtn"
+                class="btn"
+            >
+                ➕ Add Material
+            </button>
+
+        </div>
+
+
+
+        <!-- =====================================
+             STATS
+             ===================================== -->
+
+        <section class="stats-grid">
+
+
+            <div class="stat-card">
+
+                <span>
+                    Total Materials
+                </span>
+
+                <strong
+                    id="totalMaterials"
+                    class="blue"
+                >
+                    0
+                </strong>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <span>
+                    Active Materials
+                </span>
+
+                <strong
+                    id="activeMaterials"
+                    class="green"
+                >
+                    0
+                </strong>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <span>
+                    Inactive Materials
+                </span>
+
+                <strong
+                    id="inactiveMaterials"
+                    class="red"
+                >
+                    0
+                </strong>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <span>
+                    PDF / Documents
+                </span>
+
+                <strong
+                    id="documentMaterials"
+                    class="orange"
+                >
+                    0
+                </strong>
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- =====================================
+             FILTERS
+             ===================================== -->
+
+        <section class="filter-card">
+
+
+            <input
+                type="search"
+                id="searchInput"
+                placeholder="🔎 Search title, subject or class..."
+            >
+
+
+            <select id="statusFilter">
+
+                <option value="all">
+                    All Status
+                </option>
+
+                <option value="active">
+                    Active
+                </option>
+
+                <option value="inactive">
+                    Inactive
+                </option>
+
+            </select>
+
+
+            <select id="typeFilter">
+
+                <option value="all">
+                    All Types
+                </option>
+
+                <option value="pdf">
+                    PDF
+                </option>
+
+                <option value="document">
+                    Document
+                </option>
+
+                <option value="image">
+                    Image
+                </option>
+
+                <option value="link">
+                    Link
+                </option>
+
+            </select>
+
+
+            <button
+                type="button"
+                id="refreshBtn"
+                class="btn"
+            >
+                ↻ Refresh
+            </button>
+
+
+        </section>
+
+
+
+        <!-- =====================================
+             TABLE
+             ===================================== -->
+
+        <section class="table-card">
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Title
+                            </th>
+
+                            <th>
+                                Subject
+                            </th>
+
+                            <th>
+                                Class
+                            </th>
+
+                            <th>
+                                Type
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                            <th>
+                                Material
+                            </th>
+
+                            <th>
+                                Created
+                            </th>
+
+                            <th>
+                                Actions
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody id="materialsTableBody">
+
+                        <tr>
+
+                            <td
+                                colspan="8"
+                                class="empty-message"
+                            >
+                                Loading study materials...
+
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+
+
+    <!-- =========================================
+         ADD / EDIT MATERIAL MODAL
+         ========================================= -->
+
+    <div
+        id="materialModal"
+        class="modal"
+    >
+
+        <div class="modal-content">
+
+
+            <!-- MODAL HEADER -->
+
+            <div class="modal-header">
+
+                <h2 id="modalTitle">
+                    ➕ Add Study Material
+                </h2>
+
+                <button
+                    type="button"
+                    id="closeModalBtn"
+                    class="close-btn"
+                    aria-label="Close"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+
+            <!-- FORM -->
+
+            <form id="materialForm">
+
+
+                <div class="modal-body">
+
+
+                    <!-- TITLE -->
+
+                    <div class="form-group">
+
+                        <label for="title">
+                            Material Title *
+                        </label>
+
+                        <input
+                            type="text"
+                            id="title"
+                            class="form-control"
+                            placeholder="Example: Class 12 Physics Notes"
+                            required
+                        >
+
+                    </div>
+
+
+
+                    <!-- SUBJECT + CLASS -->
+
+                    <div class="form-row">
+
+
+                        <div class="form-group">
+
+                            <label for="subject">
+                                Subject
+                            </label>
+
+                            <input
+                                type="text"
+                                id="subject"
+                                class="form-control"
+                                placeholder="Physics"
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="className">
+                                Class
+                            </label>
+
+                            <input
+                                type="text"
+                                id="className"
+                                class="form-control"
+                                placeholder="12th"
+                            >
+
+                        </div>
+
+
+                    </div>
+
+
+
+                    <!-- DESCRIPTION -->
+
+                    <div class="form-group">
+
+                        <label for="description">
+                            Description
+                        </label>
+
+                        <textarea
+                            id="description"
+                            class="form-control"
+                            placeholder="Write a short description..."
+                        ></textarea>
+
+                    </div>
+
+
+
+                    <!-- MATERIAL URL -->
+
+                    <div class="form-group">
+
+                        <label for="fileUrl">
+                            Material URL *
+                        </label>
+
+                        <input
+                            type="url"
+                            id="fileUrl"
+                            class="form-control"
+                            placeholder="https://example.com/file.pdf"
+                            required
+                        >
+
+                        <small
+                            style="
+                                display:block;
+                                margin-top:6px;
+                                color:#64748b;
+                                font-size:11px;
+                            "
+                        >
+                            Google Drive, PDF, website or any public file link.
+                        </small>
+
+                    </div>
+
+
+
+                    <!-- TYPE + STATUS -->
+
+                    <div class="form-row">
+
+
+                        <div class="form-group">
+
+                            <label for="fileType">
+                                Material Type *
+                            </label>
+
+                            <select
+                                id="fileType"
+                                class="form-control"
+                                required
+                            >
+
+                                <option value="pdf">
+                                    PDF
+                                </option>
+
+                                <option value="document">
+                                    Document
+                                </option>
+
+                                <option value="image">
+                                    Image
+                                </option>
+
+                                <option value="link">
+                                    Link
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="status">
+                                Status *
+                            </label>
+
+                            <select
+                                id="status"
+                                class="form-control"
+                                required
+                            >
+
+                                <option value="active">
+                                    Active
+                                </option>
+
+                                <option value="inactive">
+                                    Inactive
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- MODAL FOOTER -->
+
+                <div class="modal-footer">
+
+                    <button
+                        type="button"
+                        id="cancelBtn"
+                        class="btn btn-secondary"
+                    >
+                        Cancel
+                    </button>
+
+
+                    <button
+                        type="submit"
+                        id="saveMaterialBtn"
+                        class="btn"
+                    >
+                        Save Material
+                    </button>
+
+                </div>
+
+
+            </form>
+
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =========================================
+         SCRIPTS
+         ========================================= -->
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script src="../assets/js/supabase.js"></script>
+
+    <script src="../assets/js/study-material-admin.js"></script>
+
+
+</body>
+
+</html>
