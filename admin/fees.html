@@ -1172,6 +1172,22 @@
 
     <script src="../assets/js/fees-admin.js"></script>
 
-
+<script>
+if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+        navigator.serviceWorker.register("../service-worker.js")
+            .then(reg => {
+                console.log("PWA Ready:", reg.scope);
+            })
+            .catch(err => {
+                console.error("PWA Error:", err);
+            });
+    });
+}
+</script>
 </body>
 </html>
+<head>
+    <link rel="manifest" href="../manifest.json">
+<meta name="theme-color" content="#2563eb">
+</head>
