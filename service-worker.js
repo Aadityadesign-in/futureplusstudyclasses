@@ -1,106 +1,157 @@
-const CACHE_NAME = "future-plus-v1";
+const CACHE_VERSION = "future-plus-v1.0.0";
+const STATIC_CACHE = `${CACHE_VERSION}-static`;
+const PAGE_CACHE = `${CACHE_VERSION}-pages`;
 
-const FILES_TO_CACHE = [
-    "./",
-    "./index.html",
-    "./manifest.json",
-    "./assets/css/style.css",
-    "./assets/js/app.js",
-    "./assets/images/logo.jpg"
+const STATIC_ASSETS = [
+  "./",
+  "./index.html",
+  "./login.html",
+  "./register.html",
+  "./admission.html",
+
+  "./student/dashboard.html",
+
+  "./admin/dashboard.html",
+  "./admin/admissions.html",
+  "./admin/assignments.html",
+  "./admin/attendance.html",
+  "./admin/fees.html",
+  "./admin/notices.html",
+  "./admin/study-material.html",
+
+  "./assets/css/style.css",
+
+  "./assets/js/app.js",
+  "./assets/js/supabase.js",
+  "./assets/js/auth.js",
+  "./assets/js/student.js",
+  "./assets/js/admin.js",
+  "./assets/js/admissions-admin.js",
+  "./assets/js/assignments-admin.js",
+  "./assets/js/attendance-admin.js",
+  "./assets/js/fees-admin.js",
+  "./assets/js/notices-admin.js",
+  "./assets/js/study-material-admin.js",
+
+  "./assets/images/logo.jpg",
+
+  "./manifest.json"
 ];
 
-
-// ================= INSTALL =================
-
 self.addEventListener("install", event => {
+  event.waitUntil(
+    caches.open(STATIC_CACHE)
+      .then(cache => cache.addAll(STATIC_ASSETS))
+      .catch(error => {
+        console.error("PWA cache install error:", error);
+      })
+  );
 
-    event.waitUntil(
-
-        caches.open(CACHE_NAME)
-            .then(cache => {
-                return cache.addAll(FILES_TO_CACHE);
-            })
-
-    );
-
-    self.skipWaiting();
-
+  self.skipWaiting();
 });
 
-
-// ================= ACTIVATE =================
 
 self.addEventListener("activate", event => {
+  event.waitUntil(
+    caches.keys().then(cacheNames => {
+      return Promise.all(
+        cacheNames
+          .filter(name => {
+            return name !== STATIC_CACHE && name !== PAGE_CACHE;
+          })
+          .map(name => caches.delete(name))
+      );
+    })
+  );
 
-    event.waitUntil(
-
-        caches.keys().then(keys => {
-
-            return Promise.all(
-
-                keys
-                    .filter(key => key !== CACHE_NAME)
-                    .map(key => caches.delete(key))
-
-            );
-
-        })
-
-    );
-
-    self.clients.claim();
-
+  self.clients.claim();
 });
 
 
-// ================= FETCH =================
-
 self.addEventListener("fetch", event => {
+  const request = event.request;
 
+  if (request.method !== "GET") {
+    return;
+  }
+
+  const url = new URL(request.url);
+
+  // Supabase/API requests should always use network.
+  if (
+    url.hostname.includes("supabase.co") ||
+    url.pathname.includes("/rest/") ||
+    url.pathname.includes("/auth/")
+  ) {
+    return;
+  }
+
+  // HTML navigation = Network First
+  if (request.mode === "navigate") {
     event.respondWith(
+      fetch(request)
+        .then(response => {
+          const copy = response.clone();
 
-        caches.match(event.request)
-            .then(cachedResponse => {
+          caches.open(PAGE_CACHE).then(cache => {
+            cache.put(request, copy);
+          });
 
-                if (cachedResponse) {
-                    return cachedResponse;
-                }
-
-                return fetch(event.request)
-                    .then(response => {
-
-                        if (
-                            !response ||
-                            response.status !== 200 ||
-                            response.type !== "basic"
-                        ) {
-                            return response;
-                        }
-
-                        const responseClone =
-                            response.clone();
-
-                        caches.open(CACHE_NAME)
-                            .then(cache => {
-                                cache.put(
-                                    event.request,
-                                    responseClone
-                                );
-                            });
-
-                        return response;
-
-                    })
-                    .catch(() => {
-
-                        return caches.match(
-                            "./index.html"
-                        );
-
-                    });
-
-            })
-
+          return response;
+        })
+        .catch(() => {
+          return caches.match(request)
+            .then(cached => {
+              return cached || caches.match("./index.html");
+            });
+        })
     );
 
+    return;
+  }
+
+  // CSS / JS / images / manifest = Cache First
+  event.respondWith(
+    caches.match(request)
+      .then(cachedResponse => {
+        if (cachedResponse) {
+          return cachedResponse;
+        }
+
+        return fetch(request)
+          .then(networkResponse => {
+            if (
+              networkResponse &&
+              networkResponse.status === 200 &&
+              networkResponse.type !== "opaque"
+            ) {
+              const copy = networkResponse.clone();
+
+              caches.open(STATIC_CACHE).then(cache => {
+                cache.put(request, copy);
+              });
+            }
+
+            return networkResponse;
+          });
+      })
+      .catch(() => {
+        return new Response(
+          "You are offline. Please reconnect to the internet.",
+          {
+            status: 503,
+            headers: {
+              "Content-Type": "text/plain; charset=utf-8"
+            }
+          }
+        );
+      })
+  );
+});
+
+
+self.addEventListener("message", event => {
+  if (event.data && event.data.type === "SKIP_WAITING") {
+    self.skipWaiting();
+  }
 });
