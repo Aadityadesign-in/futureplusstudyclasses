@@ -1,23 +1,42 @@
 {
-    "name": "Future Plus Study CLASsES",
-    "short_name": "Future Plus",
-    "description": "Future Plus Study CLASsES - Education and Student Management",
-    "start_url": "./index.html",
-    "display": "standalone",
-    "background_color": "#f8fafc",
-    "theme_color": "#0f172a",
-    "orientation": "portrait-primary",
-
-    "icons": [
-        {
-            "src": "assets/images/logo.jpg",
-            "sizes": "192x192",
-            "type": "image/jpeg"
-        },
-        {
-            "src": "assets/images/logo.jpg",
-            "sizes": "512x512",
-            "type": "image/jpeg"
-        }
-    ]
+  "name": "Future Plus Study Classes",
+  "short_name": "Future Plus",
+  "description": "Future Plus Study Classes - Student and Coaching Management App",
+  "start_url": "./index.html",
+  "scope": "./",
+  "id": "./",
+  "display": "standalone",
+  "display_override": [
+    "window-controls-overlay",
+    "standalone"
+  ],
+  "orientation": "portrait-primary",
+  "background_color": "#f8fafc",
+  "theme_color": "#2563eb",
+  "lang": "hi-IN",
+  "dir": "ltr",
+  "categories": [
+    "education",
+    "productivity"
+  ],
+  "icons": [
+    {
+      "src": "./assets/images/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./assets/images/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./assets/images/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
 }
