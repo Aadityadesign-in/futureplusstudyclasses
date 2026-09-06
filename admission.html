@@ -42,7 +42,7 @@
         <h1>Admission Form</h1>
 
         <p class="auth-subtitle">
-            Future Plus Study CLASsES
+            Future Plus Study Classes
         </p>
 
 
@@ -306,6 +306,23 @@ form.addEventListener(
 
 </script>
 
+<script>
+if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+        navigator.serviceWorker.register("../service-worker.js")
+            .then(reg => {
+                console.log("PWA Ready:", reg.scope);
+            })
+            .catch(err => {
+                console.error("PWA Error:", err);
+            });
+    });
+}
+</script>
 </body>
 
 </html>
+<head>
+    <link rel="manifest" href="./manifest.json">
+<meta name="theme-color" content="#2563eb">
+</head>
