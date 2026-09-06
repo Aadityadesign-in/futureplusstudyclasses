@@ -2,187 +2,275 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Student Dashboard | Future Plus Study CLASsES</title>
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
+    >
 
-    <link rel="stylesheet" href="../assets/css/style.css">
+    <meta
+        name="theme-color"
+        content="#2563eb"
+    >
+
+    <meta
+        name="description"
+        content="Future Plus Study Classes Student Dashboard"
+    >
+
+    <title>Student Dashboard | Future Plus Study Classes</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- Main Supabase Config -->
+    <script src="../assets/js/supabase.js"></script>
 
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
             margin: 0;
-            font-family: Arial, sans-serif;
+            font-family:
+                Inter,
+                ui-sans-serif,
+                system-ui,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                sans-serif;
             background: #f5f7fb;
-            color: #1f2937;
+            color: #172033;
         }
 
-        .dashboard-header {
-            background: white;
-            padding: 15px 25px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-            position: sticky;
+        button,
+        a {
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .sidebar {
+            width: 260px;
+            min-height: 100vh;
+            position: fixed;
+            left: 0;
             top: 0;
-            z-index: 100;
+            bottom: 0;
+            z-index: 50;
+            overflow-y: auto;
         }
 
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 12px;
+        .main-content {
+            margin-left: 260px;
+            min-height: 100vh;
         }
 
-        .brand img {
-            width: 55px;
-            height: 55px;
+        .glass-card {
+            background: rgba(255,255,255,.96);
+            border: 1px solid #e8edf5;
+            box-shadow: 0 8px 30px rgba(15,23,42,.05);
+        }
+
+        .stat-card {
+            transition: .2s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 14px 35px rgba(15,23,42,.08);
+        }
+
+        .nav-item {
+            transition: .2s ease;
+        }
+
+        .nav-item:hover {
+            background: rgba(255,255,255,.12);
+        }
+
+        .section-card {
+            border-radius: 20px;
+        }
+
+        .material-card,
+        .notice-card,
+        .assignment-card {
+            transition: .2s ease;
+        }
+
+        .material-card:hover,
+        .notice-card:hover,
+        .assignment-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(15,23,42,.08);
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 13px 14px;
+            text-align: left;
+            border-bottom: 1px solid #eef2f7;
+            white-space: nowrap;
+        }
+
+        th {
+            font-size: 13px;
+            font-weight: 700;
+            color: #64748b;
+            background: #f8fafc;
+        }
+
+        td {
+            font-size: 14px;
+            color: #334155;
+        }
+
+        .mobile-menu {
+            display: none;
+        }
+
+        .overlay {
+            display: none;
+        }
+
+        .loader {
+            width: 24px;
+            height: 24px;
+            border: 3px solid #dbeafe;
+            border-top-color: #2563eb;
             border-radius: 50%;
-            object-fit: cover;
+            animation: spin .7s linear infinite;
         }
 
-        .brand h2 {
-            margin: 0;
-            font-size: 20px;
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
         }
 
-        .logout-btn {
-            border: none;
-            background: #dc2626;
-            color: white;
-            padding: 10px 18px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
+        .fade-in {
+            animation: fadeIn .35s ease;
         }
 
-        .logout-btn:hover {
-            opacity: 0.9;
-        }
-
-        .dashboard-container {
-            max-width: 1200px;
-            margin: auto;
-            padding: 25px;
-        }
-
-        .welcome-card {
-            background: linear-gradient(135deg, #2563eb, #7c3aed);
-            color: white;
-            border-radius: 18px;
-            padding: 30px;
-            margin-bottom: 25px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
-        }
-
-        .welcome-card h1 {
-            margin: 0 0 10px;
-            font-size: 30px;
-        }
-
-        .welcome-card p {
-            margin: 0;
-            opacity: 0.9;
-        }
-
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-        }
-
-        .card {
-            background: white;
-            border-radius: 16px;
-            padding: 22px;
-            box-shadow: 0 4px 14px rgba(0,0,0,0.06);
-        }
-
-        .card h3 {
-            margin-top: 0;
-            margin-bottom: 18px;
-            font-size: 20px;
-        }
-
-        .info-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 20px;
-            border-bottom: 1px solid #eee;
-            padding: 12px 0;
-        }
-
-        .info-row:last-child {
-            border-bottom: none;
-        }
-
-        .info-row span {
-            color: #6b7280;
-        }
-
-        .info-row strong {
-            text-align: right;
-        }
-
-        .status-approved {
-            color: #16a34a;
-        }
-
-        .notice-box {
-            background: #eff6ff;
-            border-left: 4px solid #2563eb;
-            border-radius: 8px;
-            padding: 15px;
-        }
-
-        .notice-box h4 {
-            margin: 0 0 8px;
-        }
-
-        .notice-box p {
-            margin: 0;
-            color: #4b5563;
-            line-height: 1.5;
-        }
-
-        .full-width {
-            grid-column: 1 / -1;
-        }
-
-        @media (max-width: 768px) {
-
-            .dashboard-header {
-                padding: 12px 15px;
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(5px);
             }
 
-            .brand h2 {
-                font-size: 15px;
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .empty-state {
+            padding: 35px 20px;
+            text-align: center;
+            color: #64748b;
+        }
+
+        .empty-icon {
+            font-size: 38px;
+            margin-bottom: 10px;
+        }
+
+        .progress-track {
+            height: 9px;
+            background: #e2e8f0;
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            border-radius: 999px;
+            transition: width .5s ease;
+        }
+
+        @media (max-width: 900px) {
+
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform .25s ease;
             }
 
-            .brand img {
-                width: 45px;
-                height: 45px;
+            .sidebar.open {
+                transform: translateX(0);
             }
 
-            .dashboard-container {
-                padding: 15px;
+            .main-content {
+                margin-left: 0;
             }
 
-            .dashboard-grid {
-                grid-template-columns: 1fr;
+            .mobile-menu {
+                display: flex;
             }
 
-            .welcome-card {
-                padding: 22px;
+            .overlay.show {
+                display: block;
+                position: fixed;
+                inset: 0;
+                background: rgba(15,23,42,.45);
+                z-index: 40;
+            }
+        }
+
+        @media (max-width: 640px) {
+
+            .main-content {
+                width: 100%;
             }
 
-            .welcome-card h1 {
-                font-size: 24px;
+            .top-header {
+                padding: 12px 14px !important;
             }
 
-            .info-row {
-                align-items: flex-start;
+            .page-padding {
+                padding: 14px !important;
+            }
+
+            .stat-grid {
+                grid-template-columns: 1fr 1fr !important;
+            }
+
+            .stat-card {
+                padding: 15px !important;
+            }
+
+            .stat-number {
+                font-size: 23px !important;
+            }
+
+            .section-card {
+                border-radius: 16px;
+            }
+
+            .profile-name {
+                max-width: 140px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .stat-grid {
+                grid-template-columns: 1fr !important;
             }
         }
     </style>
@@ -190,896 +278,756 @@
 
 <body>
 
-<header class="dashboard-header">
+    <!-- Mobile Overlay -->
+    <div
+        id="sidebarOverlay"
+        class="overlay"
+        onclick="closeSidebar()"
+    ></div>
 
-    <div class="brand">
 
-        <img
-            src="../assets/images/logo.jpg"
-            alt="Future Plus Study Classes Logo"
+    <!-- ================= SIDEBAR ================= -->
+
+    <aside
+        id="sidebar"
+        class="sidebar bg-slate-950 text-white"
+    >
+
+        <div class="p-5 border-b border-white/10">
+
+            <div class="flex items-center gap-3">
+
+                <div
+                    class="w-11 h-11 rounded-xl bg-white flex items-center justify-center overflow-hidden"
+                >
+                    <img
+                        src="../assets/images/logo.jpg"
+                        alt="Future Plus Logo"
+                        class="w-full h-full object-contain"
+                        onerror="this.style.display='none'"
+                    >
+                </div>
+
+                <div>
+                    <h1 class="font-bold text-sm">
+                        Future Plus
+                    </h1>
+
+                    <p class="text-xs text-slate-400">
+                        Study Classes
+                    </p>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <nav class="p-3 space-y-1">
+
+            <a
+                href="#dashboard"
+                class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl bg-blue-600"
+                onclick="closeSidebar()"
+            >
+                <span>🏠</span>
+                <span class="text-sm font-medium">Dashboard</span>
+            </a>
+
+            <a
+                href="#assignments"
+                class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl"
+                onclick="closeSidebar()"
+            >
+                <span>📝</span>
+                <span class="text-sm font-medium">Assignments</span>
+            </a>
+
+            <a
+                href="#attendance"
+                class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl"
+                onclick="closeSidebar()"
+            >
+                <span>📅</span>
+                <span class="text-sm font-medium">Attendance</span>
+            </a>
+
+            <a
+                href="#fees"
+                class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl"
+                onclick="closeSidebar()"
+            >
+                <span>💰</span>
+                <span class="text-sm font-medium">Fees</span>
+            </a>
+
+            <a
+                href="#materials"
+                class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl"
+                onclick="closeSidebar()"
+            >
+                <span>📚</span>
+                <span class="text-sm font-medium">Study Materials</span>
+            </a>
+
+            <a
+                href="#notices"
+                class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl"
+                onclick="closeSidebar()"
+            >
+                <span>📢</span>
+                <span class="text-sm font-medium">Notices</span>
+            </a>
+
+        </nav>
+
+
+        <div class="absolute bottom-0 left-0 right-0 p-4 border-t border-white/10">
+
+            <button
+                onclick="logoutStudent()"
+                class="w-full flex items-center justify-center gap-2 bg-red-500/15 hover:bg-red-500/25 text-red-300 rounded-xl px-4 py-3 text-sm font-semibold"
+            >
+                🚪 Logout
+            </button>
+
+        </div>
+
+    </aside>
+
+
+    <!-- ================= MAIN ================= -->
+
+    <main class="main-content">
+
+        <!-- TOP HEADER -->
+
+        <header
+            class="top-header sticky top-0 z-30 bg-white/95 backdrop-blur border-b border-slate-200 px-6 py-4"
         >
 
-        <div>
-            <h2>Future Plus Study CLASsES</h2>
-            <small>Student Dashboard</small>
-        </div>
+            <div class="flex items-center justify-between gap-4">
 
-    </div>
+                <div class="flex items-center gap-3">
 
-    <button
-        id="logoutBtn"
-        class="logout-btn"
-    >
-        Logout
-    </button>
+                    <button
+                        onclick="openSidebar()"
+                        class="mobile-menu w-10 h-10 items-center justify-center rounded-xl bg-slate-100 text-slate-700"
+                    >
+                        ☰
+                    </button>
 
-</header>
+                    <div>
+                        <p class="text-xs text-slate-500">
+                            Welcome back 👋
+                        </p>
 
+                        <h2
+                            id="studentTopName"
+                            class="font-bold text-lg text-slate-900 profile-name truncate"
+                        >
+                            Student
+                        </h2>
+                    </div>
 
-<main class="dashboard-container">
-
-    <!-- Welcome -->
-
-    <section class="welcome-card">
-
-        <h1>
-            Welcome,
-            <span id="welcomeName">
-                Student
-            </span>
-        </h1>
-
-        <p>
-            View your profile, course, batch and coaching information.
-        </p>
-
-    </section>
+                </div>
 
 
-    <section class="dashboard-grid">
+                <div class="flex items-center gap-2">
 
+                    <button
+                        onclick="loadDashboard()"
+                        title="Refresh"
+                        class="w-10 h-10 rounded-xl bg-slate-100 hover:bg-slate-200 flex items-center justify-center"
+                    >
+                        🔄
+                    </button>
 
-        <!-- PROFILE -->
+                    <div
+                        class="hidden sm:flex w-10 h-10 rounded-full bg-blue-100 text-blue-700 items-center justify-center font-bold"
+                        id="studentAvatar"
+                    >
+                        S
+                    </div>
 
-        <div class="card">
-
-            <h3>
-                👤 My Profile
-            </h3>
-
-
-            <div class="info-row">
-
-                <span>Name</span>
-
-                <strong id="profileName">
-                    —
-                </strong>
+                </div>
 
             </div>
 
-
-            <div class="info-row">
-
-                <span>Email</span>
-
-                <strong id="profileEmail">
-                    —
-                </strong>
-
-            </div>
+        </header>
 
 
-            <div class="info-row">
+        <div
+            id="dashboard"
+            class="page-padding p-6 space-y-6"
+        >
 
-                <span>Phone</span>
+            <!-- ================= PROFILE HERO ================= -->
 
-                <strong id="profilePhone">
-                    —
-                </strong>
+            <section
+                class="rounded-3xl bg-gradient-to-r from-blue-700 via-blue-600 to-indigo-700 text-white p-6 md:p-8 shadow-xl"
+            >
 
-            </div>
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+
+                    <div>
+
+                        <p class="text-blue-100 text-sm mb-1">
+                            Future Plus Study Classes
+                        </p>
+
+                        <h2
+                            id="studentName"
+                            class="text-2xl md:text-3xl font-bold"
+                        >
+                            Loading...
+                        </h2>
+
+                        <p
+                            id="studentClass"
+                            class="mt-2 text-blue-100"
+                        >
+                            Class: —
+                        </p>
+
+                        <p
+                            id="studentEmail"
+                            class="mt-1 text-blue-100 text-sm"
+                        >
+                            —
+                        </p>
+
+                    </div>
 
 
-            <div class="info-row">
+                    <div class="bg-white/10 border border-white/20 rounded-2xl p-4 min-w-[220px]">
 
-                <span>Class</span>
+                        <p class="text-xs text-blue-100">
+                            Account Status
+                        </p>
 
-                <strong id="profileClass">
-                    —
-                </strong>
+                        <div class="flex items-center gap-2 mt-2">
 
-            </div>
+                            <span
+                                class="w-2.5 h-2.5 bg-green-400 rounded-full"
+                            ></span>
+
+                            <span
+                                id="accountStatus"
+                                class="font-semibold"
+                            >
+                                Approved
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
 
 
-            <div class="info-row">
+            <!-- ================= STATS ================= -->
 
-                <span>Account Status</span>
+            <section
+                class="stat-grid grid grid-cols-2 lg:grid-cols-4 gap-4"
+            >
 
-                <strong
-                    id="profileStatus"
-                    class="status-approved"
+                <!-- Assignment -->
+
+                <div
+                    class="stat-card glass-card rounded-2xl p-5"
                 >
-                    —
-                </strong>
 
-            </div>
+                    <div class="flex items-center justify-between">
 
-        </div>
+                        <div
+                            class="w-11 h-11 rounded-xl bg-blue-100 flex items-center justify-center text-xl"
+                        >
+                            📝
+                        </div>
 
+                        <span class="text-xs text-slate-400">
+                            Tasks
+                        </span>
 
+                    </div>
 
-        <!-- COURSE -->
+                    <p
+                        id="assignmentCount"
+                        class="stat-number text-3xl font-bold mt-4 text-slate-900"
+                    >
+                        0
+                    </p>
 
-        <div class="card">
+                    <p class="text-sm text-slate-500 mt-1">
+                        Assignments
+                    </p>
 
-            <h3>
-                📚 My Course & Batch
-            </h3>
+                </div>
 
 
-            <div class="info-row">
+                <!-- Attendance -->
 
-                <span>Course</span>
+                <div
+                    class="stat-card glass-card rounded-2xl p-5"
+                >
 
-                <strong id="courseName">
-                    Course Not Assigned
-                </strong>
+                    <div class="flex items-center justify-between">
 
-            </div>
+                        <div
+                            class="w-11 h-11 rounded-xl bg-green-100 flex items-center justify-center text-xl"
+                        >
+                            📅
+                        </div>
 
+                        <span class="text-xs text-slate-400">
+                            Attendance
+                        </span>
 
-            <div class="info-row">
+                    </div>
 
-                <span>Class</span>
+                    <p
+                        id="attendancePercentage"
+                        class="stat-number text-3xl font-bold mt-4 text-green-600"
+                    >
+                        0%
+                    </p>
 
-                <strong id="courseClass">
-                    —
-                </strong>
+                    <p class="text-sm text-slate-500 mt-1">
+                        Overall
+                    </p>
 
-            </div>
+                </div>
 
 
-            <div class="info-row">
+                <!-- Fees -->
 
-                <span>Batch</span>
+                <div
+                    class="stat-card glass-card rounded-2xl p-5"
+                >
 
-                <strong id="courseBatch">
-                    Not Assigned
-                </strong>
+                    <div class="flex items-center justify-between">
 
-            </div>
+                        <div
+                            class="w-11 h-11 rounded-xl bg-orange-100 flex items-center justify-center text-xl"
+                        >
+                            💰
+                        </div>
 
+                        <span class="text-xs text-slate-400">
+                            Payment
+                        </span>
 
-            <div class="info-row">
+                    </div>
 
-                <span>Timing</span>
+                    <p
+                        id="feeDue"
+                        class="stat-number text-3xl font-bold mt-4 text-orange-600"
+                    >
+                        ₹0
+                    </p>
 
-                <strong id="courseTiming">
-                    —
-                </strong>
+                    <p class="text-sm text-slate-500 mt-1">
+                        Total Due
+                    </p>
 
-            </div>
+                </div>
 
 
-            <div class="info-row">
+                <!-- Materials -->
 
-                <span>Teacher</span>
+                <div
+                    class="stat-card glass-card rounded-2xl p-5"
+                >
 
-                <strong id="courseTeacher">
-                    —
-                </strong>
+                    <div class="flex items-center justify-between">
 
-            </div>
+                        <div
+                            class="w-11 h-11 rounded-xl bg-purple-100 flex items-center justify-center text-xl"
+                        >
+                            📚
+                        </div>
 
-        </div>
+                        <span class="text-xs text-slate-400">
+                            Learning
+                        </span>
 
+                    </div>
 
+                    <p
+                        id="materialCount"
+                        class="stat-number text-3xl font-bold mt-4 text-purple-600"
+                    >
+                        0
+                    </p>
 
-        <!-- COACHING INFO -->
+                    <p class="text-sm text-slate-500 mt-1">
+                        Materials
+                    </p>
 
-        <div class="card">
+                </div>
 
-            <h3>
-                🏫 Coaching Information
-            </h3>
+            </section>
 
 
-            <div class="info-row">
+            <!-- ================= ASSIGNMENTS ================= -->
 
-                <span>Institute</span>
+            <section
+                id="assignments"
+                class="section-card glass-card overflow-hidden"
+            >
 
-                <strong>
-                    Future Plus Study CLASsES
-                </strong>
+                <div class="p-5 md:p-6 border-b border-slate-100">
 
-            </div>
+                    <div class="flex items-center justify-between gap-3">
 
+                        <div>
 
-            <div class="info-row">
+                            <h3 class="font-bold text-lg text-slate-900">
+                                📝 Assignments
+                            </h3>
 
-                <span>Phone</span>
+                            <p class="text-sm text-slate-500 mt-1">
+                                आपके assigned tasks
+                            </p>
 
-                <strong>
-                    9135766040
-                </strong>
+                        </div>
 
-            </div>
+                        <span
+                            id="assignmentBadge"
+                            class="px-3 py-1 rounded-full bg-blue-100 text-blue-700 text-xs font-bold"
+                        >
+                            0
+                        </span>
 
+                    </div>
 
-            <div class="info-row">
+                </div>
 
-                <span>Location</span>
 
-                <strong>
-                    Lalganj, Vaishali
-                </strong>
+                <div
+                    id="assignmentsContainer"
+                    class="p-5 md:p-6"
+                >
 
-            </div>
+                    <div class="flex justify-center py-8">
+                        <div class="loader"></div>
+                    </div>
 
-        </div>
+                </div>
 
+            </section>
 
 
-        <!-- QUICK STATUS -->
+            <!-- ================= ATTENDANCE ================= -->
 
-        <div class="card">
+            <section
+                id="attendance"
+                class="section-card glass-card overflow-hidden"
+            >
 
-            <h3>
-                ✅ Student Status
-            </h3>
+                <div class="p-5 md:p-6 border-b border-slate-100">
 
+                    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
 
-            <div class="info-row">
+                        <div>
 
-                <span>Account</span>
+                            <h3 class="font-bold text-lg text-slate-900">
+                                📅 Attendance
+                            </h3>
 
-                <strong>
-                    Approved
-                </strong>
+                            <p class="text-sm text-slate-500 mt-1">
+                                आपकी attendance performance
+                            </p>
 
-            </div>
+                        </div>
 
+                        <div class="text-right">
 
-            <div class="info-row">
+                            <div
+                                id="attendanceBigPercentage"
+                                class="text-2xl font-bold text-green-600"
+                            >
+                                0%
+                            </div>
 
-                <span>Course Assignment</span>
+                            <p
+                                id="attendanceSummary"
+                                class="text-xs text-slate-500"
+                            >
+                                0 present / 0 total
+                            </p>
 
-                <strong id="assignmentStatus">
-                    Checking...
-                </strong>
+                        </div>
 
-            </div>
+                    </div>
 
-        </div>
-        <!-- ATTENDANCE -->
 
-<div class="card full-width">
+                    <div class="mt-5 progress-track">
 
-    <h3>
-        📊 My Attendance
-    </h3>
+                        <div
+                            id="attendanceProgress"
+                            class="progress-bar bg-green-500"
+                            style="width:0%"
+                        ></div>
 
-    <div class="attendance-summary">
+                    </div>
 
-        <div class="attendance-main">
+                </div>
 
-            <div class="attendance-circle">
 
-                <span id="attendancePercentage">
-                    0%
-                </span>
+                <div
+                    id="attendanceContainer"
+                    class="p-5 md:p-6"
+                >
 
-            </div>
+                    <div class="flex justify-center py-8">
+                        <div class="loader"></div>
+                    </div>
 
-            <div>
+                </div>
 
-                <h4>
-                    Overall Attendance
-                </h4>
+            </section>
 
-                <p id="attendanceMessage">
-                    Loading attendance...
+
+            <!-- ================= FEES ================= -->
+
+            <section
+                id="fees"
+                class="section-card glass-card overflow-hidden"
+            >
+
+                <div class="p-5 md:p-6 border-b border-slate-100">
+
+                    <h3 class="font-bold text-lg text-slate-900">
+                        💰 Fees
+                    </h3>
+
+                    <p class="text-sm text-slate-500 mt-1">
+                        आपकी fee summary और payment history
+                    </p>
+
+                </div>
+
+
+                <div class="p-5 md:p-6">
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+                        <div class="rounded-2xl bg-slate-50 p-5">
+                            <p class="text-sm text-slate-500">
+                                Total Fees
+                            </p>
+
+                            <p
+                                id="totalFees"
+                                class="text-2xl font-bold mt-2"
+                            >
+                                ₹0
+                            </p>
+                        </div>
+
+
+                        <div class="rounded-2xl bg-green-50 p-5">
+                            <p class="text-sm text-green-700">
+                                Paid
+                            </p>
+
+                            <p
+                                id="paidFees"
+                                class="text-2xl font-bold text-green-700 mt-2"
+                            >
+                                ₹0
+                            </p>
+                        </div>
+
+
+                        <div class="rounded-2xl bg-orange-50 p-5">
+                            <p class="text-sm text-orange-700">
+                                Due
+                            </p>
+
+                            <p
+                                id="dueFees"
+                                class="text-2xl font-bold text-orange-700 mt-2"
+                            >
+                                ₹0
+                            </p>
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        id="feesContainer"
+                        class="mt-6"
+                    >
+
+                        <div class="flex justify-center py-8">
+                            <div class="loader"></div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================= STUDY MATERIAL ================= -->
+
+            <section
+                id="materials"
+                class="section-card glass-card overflow-hidden"
+            >
+
+                <div class="p-5 md:p-6 border-b border-slate-100">
+
+                    <div class="flex items-center justify-between gap-3">
+
+                        <div>
+
+                            <h3 class="font-bold text-lg text-slate-900">
+                                📚 Study Materials
+                            </h3>
+
+                            <p class="text-sm text-slate-500 mt-1">
+                                आपकी class के learning resources
+                            </p>
+
+                        </div>
+
+                        <span
+                            id="materialBadge"
+                            class="px-3 py-1 rounded-full bg-purple-100 text-purple-700 text-xs font-bold"
+                        >
+                            0
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    id="materialsContainer"
+                    class="p-5 md:p-6"
+                >
+
+                    <div class="flex justify-center py-8">
+                        <div class="loader"></div>
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================= NOTICES ================= -->
+
+            <section
+                id="notices"
+                class="section-card glass-card overflow-hidden"
+            >
+
+                <div class="p-5 md:p-6 border-b border-slate-100">
+
+                    <div>
+
+                        <h3 class="font-bold text-lg text-slate-900">
+                            📢 Latest Notices
+                        </h3>
+
+                        <p class="text-sm text-slate-500 mt-1">
+                            Institute की latest announcements
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    id="noticesContainer"
+                    class="p-5 md:p-6"
+                >
+
+                    <div class="flex justify-center py-8">
+                        <div class="loader"></div>
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================= FOOTER ================= -->
+
+            <footer class="text-center py-5 text-xs text-slate-400">
+
+                <p>
+                    © <span id="currentYear"></span>
+                    Future Plus Study Classes
                 </p>
 
-            </div>
-            <style>.attendance-summary {
-
-    display: grid;
-
-    grid-template-columns:
-        1fr 2fr;
-
-    gap: 25px;
-
-    align-items: center;
-
-}
-
-.attendance-main {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 20px;
-
-}
-
-.attendance-circle {
-
-    width: 110px;
-
-    height: 110px;
-
-    border-radius: 50%;
-
-    background: #eff6ff;
-
-    border: 8px solid #2563eb;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    flex-shrink: 0;
-
-}
-
-.attendance-circle span {
-
-    font-size: 24px;
-
-    font-weight: 700;
-
-    color: #2563eb;
-
-}
-
-.attendance-main h4 {
-
-    margin: 0 0 7px;
-
-}
-
-.attendance-main p {
-
-    margin: 0;
-
-    color: #6b7280;
-
-}
-
-.attendance-stats {
-
-    display: grid;
-
-    grid-template-columns:
-        repeat(3, 1fr);
-
-    gap: 12px;
-
-}
-
-.attendance-stat {
-
-    background: #f8fafc;
-
-    padding: 18px;
-
-    border-radius: 10px;
-
-}
-
-.attendance-stat span {
-
-    display: block;
-
-    color: #6b7280;
-
-    font-size: 13px;
-
-    margin-bottom: 7px;
-
-}
-
-.attendance-stat strong {
-
-    font-size: 24px;
-
-}
-
-.present-text {
-
-    color: #16a34a;
-
-}
-
-.absent-text {
-
-    color: #dc2626;
-
-}
-
-
-@media(max-width:700px) {
-
-    .attendance-summary {
-
-        grid-template-columns: 1fr;
-
-    }
-
-    .attendance-stats {
-
-        grid-template-columns: 1fr;
-
-    }
-
-}
-</style>
+                <p class="mt-1">
+                    Student Portal
+                </p>
+
+            </footer>
 
         </div>
 
-
-        <div class="attendance-stats">
-
-            <div class="attendance-stat">
-
-                <span>
-                    Total Classes
-                </span>
-
-                <strong id="totalClasses">
-                    0
-                </strong>
-
-            </div>
-
-
-            <div class="attendance-stat">
-
-                <span>
-                    Present
-                </span>
-
-                <strong
-                    id="studentPresent"
-                    class="present-text"
-                >
-                    0
-                </strong>
-
-            </div>
-
-
-            <div class="attendance-stat">
-
-                <span>
-                    Absent
-                </span>
-
-                <strong
-                    id="studentAbsent"
-                    class="absent-text"
-                >
-                    0
-                </strong>
-
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <h4 style="margin-top:25px;">
-        📅 Attendance History
-    </h4>
-
-
-    <div style="overflow-x:auto;">
-
-        <table
-            style="
-                width:100%;
-                border-collapse:collapse;
-            "
-        >
-
-            <thead>
-
-                <tr>
-
-                    <th
-                        style="
-                            text-align:left;
-                            padding:12px;
-                            border-bottom:1px solid #eee;
-                        "
-                    >
-                        Date
-                    </th>
-
-                    <th
-                        style="
-                            text-align:left;
-                            padding:12px;
-                            border-bottom:1px solid #eee;
-                        "
-                    >
-                        Status
-                    </th>
-
-                </tr>
-
-            </thead>
-
-
-            <tbody id="attendanceHistory">
-
-                <tr>
-
-                    <td
-                        colspan="2"
-                        style="padding:15px;"
-                    >
-                        Loading...
-
-                    </td>
-
-                </tr>
-
-            </tbody>
-
-        </table>
-
-    </div>
-
-</div>
-<!-- MY FEES -->
-
-<div class="card full-width">
-
-    <h3>💰 My Fees</h3>
-
-    <div class="fee-summary">
-
-        <div class="fee-stat">
-            <span>Total Fee</span>
-            <strong id="myTotalFee">₹0</strong>
-        </div>
-
-        <div class="fee-stat">
-            <span>Total Paid</span>
-            <strong
-                id="myPaidFee"
-                class="present-text"
-            >
-                ₹0
-            </strong>
-        </div>
-
-        <div class="fee-stat">
-            <span>Total Due</span>
-            <strong
-                id="myDueFee"
-                class="absent-text"
-            >
-                ₹0
-            </strong>
-        </div>
-
-        <div class="fee-stat">
-            <span>Fee Status</span>
-            <strong id="myFeeStatus">
-                —
-            </strong>
-        </div>
-
-    </div>
-
-
-    <h4 style="margin-top:25px;">
-        📋 Fee History
-    </h4>
-
-
-    <div style="overflow-x:auto;">
-
-        <table
-            style="
-                width:100%;
-                border-collapse:collapse;
-            "
-        >
-
-            <thead>
-
-                <tr>
-
-                    <th
-                        style="
-                            text-align:left;
-                            padding:12px;
-                            border-bottom:1px solid #eee;
-                        "
-                    >
-                        Fee Type
-                    </th>
-
-                    <th
-                        style="
-                            text-align:left;
-                            padding:12px;
-                            border-bottom:1px solid #eee;
-                        "
-                    >
-                        Amount
-                    </th>
-
-                    <th
-                        style="
-                            text-align:left;
-                            padding:12px;
-                            border-bottom:1px solid #eee;
-                        "
-                    >
-                        Paid
-                    </th>
-
-                    <th
-                        style="
-                            text-align:left;
-                            padding:12px;
-                            border-bottom:1px solid #eee;
-                        "
-                    >
-                        Due
-                    </th>
-
-                    <th
-                        style="
-                            text-align:left;
-                            padding:12px;
-                            border-bottom:1px solid #eee;
-                        "
-                    >
-                        Status
-                    </th>
-
-                    <th
-                        style="
-                            text-align:left;
-                            padding:12px;
-                            border-bottom:1px solid #eee;
-                        "
-                    >
-                        Due Date
-                    </th>
-
-                </tr>
-
-            </thead>
-
-
-            <tbody id="feesHistory">
-
-                <tr>
-
-                    <td
-                        colspan="6"
-                        style="padding:15px;"
-                    >
-                        Loading fees...
-
-                    </td>
-
-                </tr>
-
-            </tbody>
-
-        </table>
-
-    </div>
-
-</div>
-<style>.fee-summary {
-
-    display:grid;
-
-    grid-template-columns:
-        repeat(4, 1fr);
-
-    gap:15px;
-
-    margin-top:15px;
-
+    </main>
+
+
+    <!-- Student JS -->
+    <script src="../assets/js/student.js"></script>
+
+
+    <script>
+        function openSidebar() {
+            document
+                .getElementById("sidebar")
+                .classList.add("open");
+
+            document
+                .getElementById("sidebarOverlay")
+                .classList.add("show");
+        }
+
+        function closeSidebar() {
+            document
+                .getElementById("sidebar")
+                .classList.remove("open");
+
+            document
+                .getElementById("sidebarOverlay")
+                .classList.remove("show");
+        }
+
+        document.getElementById("currentYear").textContent =
+            new Date().getFullYear();
+    </script>
+
+    <script>
+if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+        navigator.serviceWorker.register("../service-worker.js")
+            .then(reg => {
+                console.log("PWA Ready:", reg.scope);
+            })
+            .catch(err => {
+                console.error("PWA Error:", err);
+            });
+    });
 }
-
-
-.fee-stat {
-
-    background:#f8fafc;
-
-    padding:18px;
-
-    border-radius:10px;
-
-}
-
-
-.fee-stat span {
-
-    display:block;
-
-    color:#6b7280;
-
-    font-size:13px;
-
-    margin-bottom:8px;
-
-}
-
-
-.fee-stat strong {
-
-    font-size:22px;
-
-}
-
-
-@media(max-width:700px) {
-
-    .fee-summary {
-
-        grid-template-columns:
-            repeat(2, 1fr);
-
-    }
-
-}
-
-
-@media(max-width:450px) {
-
-    .fee-summary {
-
-        grid-template-columns:1fr;
-
-    }
-
-}
-</style>
-<!-- STUDY MATERIALS -->
-
-<div class="card full-width">
-
-    <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;">
-        <div>
-            <h3 style="margin-bottom:5px;">📚 Study Materials</h3>
-
-            <p style="margin:0;color:#6b7280;font-size:14px;">
-                Notes, PDFs, documents और useful study links
-            </p>
-        </div>
-
-        <button
-            onclick="loadStudentMaterials()"
-            class="btn-refresh"
-        >
-            🔄 Refresh
-        </button>
-    </div>
-
-
-    <div id="materialsContainer" style="margin-top:20px;">
-
-        <div class="notice-box">
-            <p>Loading study materials...</p>
-        </div>
-
-    </div>
-
-</div>
-<style>
-    .btn-refresh {
-    border: none;
-    background: #eff6ff;
-    color: #2563eb;
-    padding: 9px 13px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 600;
-}
-
-.material-card {
-    border: 1px solid #e5e7eb;
-    border-radius: 12px;
-    padding: 16px;
-    margin-bottom: 12px;
-    background: #ffffff;
-}
-
-.material-card h4 {
-    margin: 0 0 8px;
-    color: #111827;
-}
-
-.material-meta {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-    margin: 10px 0;
-}
-
-.material-tag {
-    background: #f3f4f6;
-    color: #374151;
-    padding: 5px 9px;
-    border-radius: 20px;
-    font-size: 12px;
-}
-
-.material-open {
-    display: inline-block;
-    margin-top: 8px;
-    padding: 9px 14px;
-    background: #2563eb;
-    color: white;
-    text-decoration: none;
-    border-radius: 8px;
-    font-size: 13px;
-    font-weight: 600;
-}
-
-.material-description {
-    color: #6b7280;
-    font-size: 14px;
-    line-height: 1.5;
-}
-</style>
-
-
-
-
-        <!-- NOTICES -->
-
-       <div class="card full-width">
-
-    <h3>
-        📢 Latest Notices
-    </h3>
-
-    <div id="noticesContainer">
-
-        <div class="notice-box">
-
-            <p>
-                Loading notices...
-            </p>
-
-        </div>
-
-    </div>
-
-</div>
-
-
-    </section>
-
-</main>
-
-
-<script
-    src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
 </script>
-
-<script src="../assets/js/supabase.js"></script>
-
-<script src="../assets/js/student.js"></script>
-
 </body>
 </html>
+<head>
+    <link rel="manifest" href="../manifest.json">
+<meta name="theme-color" content="#2563eb">
+</head>
