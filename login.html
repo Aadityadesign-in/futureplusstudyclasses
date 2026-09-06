@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Login | Future Plus Study CLASSES</title>
+    <title>Login | Future Plus Study Classes</title>
 
     <link rel="stylesheet" href="assets/css/style.css">
 
@@ -205,7 +205,7 @@
             <!-- LOGO -->
             <img
                 src="assets/images/logo.jpg"
-                alt="Future Plus Study CLASSES Logo"
+                alt="Future Plus Study Classes Logo"
                 class="logo"
             >
 
@@ -215,7 +215,7 @@
             </h1>
 
             <p class="subtitle">
-                Future Plus Study CLASSES
+                Future Plus Study Classes
             </p>
 
             <!-- MESSAGE -->
@@ -321,6 +321,23 @@
 
     <script src="assets/js/auth.js"></script>
 
+    <script>
+if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+        navigator.serviceWorker.register("../service-worker.js")
+            .then(reg => {
+                console.log("PWA Ready:", reg.scope);
+            })
+            .catch(err => {
+                console.error("PWA Error:", err);
+            });
+    });
+}
+</script>
 </body>
 
 </html>
+<head>
+    <link rel="manifest" href="./manifest.json">
+<meta name="theme-color" content="#2563eb">
+</head>
