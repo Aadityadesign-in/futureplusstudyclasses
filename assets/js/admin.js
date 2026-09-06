@@ -1,99 +1,214 @@
 // ==================================================
-// FUTURE PLUS STUDY Classes
-// ADMIN DASHBOARD
-// STUDENTS + ADMISSIONS
-// ==================================================
-
-
-// ==================================================
-// GLOBAL DATA
+// FUTURE PLUS STUDY CLASSES
+// PROFESSIONAL ADMIN DASHBOARD
 // ==================================================
 
 let allStudents = [];
 let allAdmissions = [];
+let currentAdminProfile = null;
 
 
 // ==================================================
-// STUDENT ELEMENTS
+// ELEMENTS
 // ==================================================
 
-const studentTableBody =
-    document.getElementById("studentTableBody");
+const studentTableBody = document.getElementById("studentTableBody");
+const admissionTableBody = document.getElementById("admissionTableBody");
 
-const totalStudents =
-    document.getElementById("totalStudents");
+const totalStudents = document.getElementById("totalStudents");
+const pendingStudents = document.getElementById("pendingStudents");
+const approvedStudents = document.getElementById("approvedStudents");
+const approvedStudentsMini = document.getElementById("approvedStudentsMini");
+const rejectedStudents = document.getElementById("rejectedStudents");
 
-const pendingStudents =
-    document.getElementById("pendingStudents");
+const totalAdmissions = document.getElementById("totalAdmissions");
+const pendingAdmissions = document.getElementById("pendingAdmissions");
+const pendingAdmissionsMini = document.getElementById("pendingAdmissionsMini");
+const approvedAdmissions = document.getElementById("approvedAdmissions");
 
-const approvedStudents =
-    document.getElementById("approvedStudents");
+const totalAssignments = document.getElementById("totalAssignments");
+const todayAttendance = document.getElementById("todayAttendance");
+const totalFeesRecords = document.getElementById("totalFeesRecords");
+const totalMaterials = document.getElementById("totalMaterials");
+const totalNotices = document.getElementById("totalNotices");
 
-const rejectedStudents =
-    document.getElementById("rejectedStudents");
+const studentSearch = document.getElementById("studentSearch");
+const logoutBtn = document.getElementById("logoutBtn");
+const adminError = document.getElementById("adminError");
+const adminName = document.getElementById("adminName");
+const currentDate = document.getElementById("currentDate");
+const refreshBtn = document.getElementById("refreshBtn");
 
-const studentSearch =
-    document.getElementById("studentSearch");
-
-
-// ==================================================
-// ADMISSION ELEMENTS
-// ==================================================
-
-const admissionTableBody =
-    document.getElementById("admissionTableBody");
-
-const totalAdmissions =
-    document.getElementById("totalAdmissions");
-
-const pendingAdmissions =
-    document.getElementById("pendingAdmissions");
-
-const approvedAdmissions =
-    document.getElementById("approvedAdmissions");
+const adminSidebar = document.getElementById("adminSidebar");
+const sidebarOverlay = document.getElementById("sidebarOverlay");
+const menuBtn = document.getElementById("menuBtn");
+const toast = document.getElementById("toast");
 
 
 // ==================================================
-// COMMON ELEMENTS
+// HELPERS
 // ==================================================
 
-const logoutBtn =
-    document.getElementById("logoutBtn");
+function normalizeStatus(value, fallback = "pending") {
+    const result = String(value || fallback).trim().toLowerCase();
+    return result || fallback;
+}
 
-const adminError =
-    document.getElementById("adminError");
 
+function escapeHTML(value) {
+    return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+}
 
-// ==================================================
-// ERROR MESSAGE
-// ==================================================
 
 function showAdminError(message) {
 
     if (!adminError) return;
 
     adminError.textContent = message;
-
     adminError.style.display = "block";
 }
 
-
-// ==================================================
-// HIDE ERROR
-// ==================================================
 
 function hideAdminError() {
 
     if (!adminError) return;
 
     adminError.textContent = "";
-
     adminError.style.display = "none";
 }
 
 
+function showToast(message) {
+
+    if (!toast) return;
+
+    toast.textContent = message;
+    toast.style.display = "block";
+
+    clearTimeout(showToast.timer);
+
+    showToast.timer = setTimeout(() => {
+        toast.style.display = "none";
+    }, 2500);
+}
+
+
+function formatTodayForDatabase() {
+
+    const now = new Date();
+
+    const year = now.getFullYear();
+
+    const month =
+        String(now.getMonth() + 1)
+            .padStart(2, "0");
+
+    const day =
+        String(now.getDate())
+            .padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
+}
+
+
+function setCurrentDate() {
+
+    if (!currentDate) return;
+
+    currentDate.textContent =
+        new Intl.DateTimeFormat("en-IN", {
+            day: "2-digit",
+            month: "short",
+            year: "numeric"
+        }).format(new Date());
+}
+
+
 // ==================================================
-// CHECK ADMIN
+// SIDEBAR
+// ==================================================
+
+function openSidebar() {
+
+    if (!adminSidebar || !sidebarOverlay)
+        return;
+
+    adminSidebar.classList.add("open");
+
+    sidebarOverlay.classList.add("show");
+
+    document.body.classList.add("sidebar-open");
+}
+
+
+function closeSidebar() {
+
+    if (!adminSidebar || !sidebarOverlay)
+        return;
+
+    adminSidebar.classList.remove("open");
+
+    sidebarOverlay.classList.remove("show");
+
+    document.body.classList.remove("sidebar-open");
+}
+
+
+if (menuBtn) {
+
+    menuBtn.addEventListener(
+        "click",
+        openSidebar
+    );
+}
+
+
+if (sidebarOverlay) {
+
+    sidebarOverlay.addEventListener(
+        "click",
+        closeSidebar
+    );
+}
+
+
+document
+    .querySelectorAll(".sidebar .nav-link")
+    .forEach(link => {
+
+        link.addEventListener(
+            "click",
+            () => {
+
+                if (window.innerWidth <= 900) {
+                    closeSidebar();
+                }
+
+            }
+        );
+
+    });
+
+
+window.addEventListener(
+    "resize",
+    () => {
+
+        if (window.innerWidth > 900) {
+            closeSidebar();
+        }
+
+    }
+);
+
+
+// ==================================================
+// ADMIN SECURITY CHECK
 // ==================================================
 
 async function checkAdmin() {
@@ -104,11 +219,12 @@ async function checkAdmin() {
             data: {
                 user
             },
-            error: sessionError
-        } = await supabaseClient.auth.getUser();
+            error: userError
+        } =
+            await supabaseClient.auth.getUser();
 
 
-        if (sessionError || !user) {
+        if (userError || !user) {
 
             window.location.href =
                 "../login.html";
@@ -119,18 +235,23 @@ async function checkAdmin() {
 
         const {
             data: profile,
-            error
+            error: profileError
         } =
             await supabaseClient
                 .from("profiles")
-                .select("*")
+                .select(
+                    "id, full_name, email, role, status"
+                )
                 .eq("id", user.id)
                 .single();
 
 
-        if (error) {
+        if (profileError || !profile) {
 
-            console.error(error);
+            console.error(
+                "Admin profile error:",
+                profileError
+            );
 
             await supabaseClient.auth.signOut();
 
@@ -141,9 +262,23 @@ async function checkAdmin() {
         }
 
 
+        const role =
+            normalizeStatus(
+                profile.role,
+                ""
+            );
+
+
+        const status =
+            normalizeStatus(
+                profile.status,
+                ""
+            );
+
+
         if (
-            profile.role !== "admin" ||
-            profile.status !== "approved"
+            role !== "admin" ||
+            status !== "approved"
         ) {
 
             await supabaseClient.auth.signOut();
@@ -152,6 +287,19 @@ async function checkAdmin() {
                 "../login.html";
 
             return false;
+        }
+
+
+        currentAdminProfile =
+            profile;
+
+
+        if (adminName) {
+
+            adminName.textContent =
+                profile.full_name ||
+                "Admin";
+
         }
 
 
@@ -212,13 +360,12 @@ async function loadStudents() {
 
 
         if (error) {
-
             throw error;
-
         }
 
 
-        allStudents = data || [];
+        allStudents =
+            data || [];
 
 
         updateStudentStatistics();
@@ -227,7 +374,6 @@ async function loadStudents() {
         renderStudents(
             allStudents
         );
-
 
     }
 
@@ -241,7 +387,10 @@ async function loadStudents() {
 
         showAdminError(
             "Students load नहीं हो सके: " +
-            error.message
+            (
+                error.message ||
+                "Unknown error"
+            )
         );
 
 
@@ -275,42 +424,68 @@ function updateStudentStatistics() {
     const pending =
         allStudents.filter(
             student =>
-                student.status === "pending"
+                normalizeStatus(
+                    student.status
+                ) === "pending"
         ).length;
 
 
     const approved =
         allStudents.filter(
             student =>
-                student.status === "approved"
+                normalizeStatus(
+                    student.status
+                ) === "approved"
         ).length;
 
 
     const rejected =
         allStudents.filter(
             student =>
-                student.status === "rejected"
+                normalizeStatus(
+                    student.status
+                ) === "rejected"
         ).length;
 
 
-    if (totalStudents)
+    if (totalStudents) {
+
         totalStudents.textContent =
             total;
 
+    }
 
-    if (pendingStudents)
+
+    if (pendingStudents) {
+
         pendingStudents.textContent =
             pending;
 
+    }
 
-    if (approvedStudents)
+
+    if (approvedStudents) {
+
         approvedStudents.textContent =
             approved;
 
+    }
 
-    if (rejectedStudents)
+
+    if (approvedStudentsMini) {
+
+        approvedStudentsMini.textContent =
+            approved;
+
+    }
+
+
+    if (rejectedStudents) {
+
         rejectedStudents.textContent =
             rejected;
+
+    }
 
 }
 
@@ -344,39 +519,30 @@ function renderStudents(students) {
             .map(student => {
 
                 const status =
-                    student.status || "pending";
+                    normalizeStatus(
+                        student.status
+                    );
 
 
-                let statusClass =
-                    "pending";
+                const validStatusClasses = [
+                    "pending",
+                    "approved",
+                    "rejected"
+                ];
 
 
-                if (
-                    status === "approved"
-                ) {
-
-                    statusClass =
-                        "approved";
-
-                }
-
-
-                if (
-                    status === "rejected"
-                ) {
-
-                    statusClass =
-                        "rejected";
-
-                }
+                const statusClass =
+                    validStatusClasses.includes(
+                        status
+                    )
+                        ? status
+                        : "pending";
 
 
                 let actions = "";
 
 
-                if (
-                    status === "pending"
-                ) {
+                if (status === "pending") {
 
                     actions = `
 
@@ -405,7 +571,7 @@ function renderStudents(students) {
                 }
 
 
-                if (
+                else if (
                     status === "rejected"
                 ) {
 
@@ -426,7 +592,7 @@ function renderStudents(students) {
                 }
 
 
-                if (
+                else if (
                     status === "approved"
                 ) {
 
@@ -443,6 +609,14 @@ function renderStudents(students) {
                         </button>
 
                     `;
+
+                }
+
+
+                else {
+
+                    actions =
+                        `<span style="color:#94a3b8;">—</span>`;
 
                 }
 
@@ -453,25 +627,29 @@ function renderStudents(students) {
 
                         <td>
                             ${escapeHTML(
-                                student.full_name || "-"
+                                student.full_name ||
+                                "-"
                             )}
                         </td>
 
                         <td>
                             ${escapeHTML(
-                                student.email || "-"
+                                student.email ||
+                                "-"
                             )}
                         </td>
 
                         <td>
                             ${escapeHTML(
-                                student.phone || "-"
+                                student.phone ||
+                                "-"
                             )}
                         </td>
 
                         <td>
                             ${escapeHTML(
-                                student.class_name || "-"
+                                student.class_name ||
+                                "-"
                             )}
                         </td>
 
@@ -480,7 +658,9 @@ function renderStudents(students) {
                             <span
                                 class="status ${statusClass}"
                             >
-                                ${status.toUpperCase()}
+                                ${escapeHTML(
+                                    status.toUpperCase()
+                                )}
                             </span>
 
                         </td>
@@ -541,16 +721,14 @@ async function updateStudentStatus(
 
 
         if (error) {
-
             throw error;
-
         }
 
 
         await loadStudents();
 
 
-        alert(
+        showToast(
             newStatus === "approved"
                 ? "Student approved successfully."
                 : "Student rejected successfully."
@@ -568,12 +746,19 @@ async function updateStudentStatus(
 
         alert(
             "Status update failed: " +
-            error.message
+            (
+                error.message ||
+                "Unknown error"
+            )
         );
 
     }
 
 }
+
+
+window.updateStudentStatus =
+    updateStudentStatus;
 
 
 // ==================================================
@@ -608,25 +793,37 @@ if (studentSearch) {
 
                         return (
 
-                            (student.full_name || "")
+                            (
+                                student.full_name ||
+                                ""
+                            )
                                 .toLowerCase()
                                 .includes(search)
 
                             ||
 
-                            (student.email || "")
+                            (
+                                student.email ||
+                                ""
+                            )
                                 .toLowerCase()
                                 .includes(search)
 
                             ||
 
-                            (student.phone || "")
+                            (
+                                student.phone ||
+                                ""
+                            )
                                 .toLowerCase()
                                 .includes(search)
 
                             ||
 
-                            (student.class_name || "")
+                            (
+                                student.class_name ||
+                                ""
+                            )
                                 .toLowerCase()
                                 .includes(search)
 
@@ -683,9 +880,7 @@ async function loadAdmissions() {
 
 
         if (error) {
-
             throw error;
-
         }
 
 
@@ -700,7 +895,6 @@ async function loadAdmissions() {
             allAdmissions
         );
 
-
     }
 
     catch (error) {
@@ -713,7 +907,10 @@ async function loadAdmissions() {
 
         showAdminError(
             "Admissions load नहीं हो सके: " +
-            error.message
+            (
+                error.message ||
+                "Unknown error"
+            )
         );
 
 
@@ -747,30 +944,51 @@ function updateAdmissionStatistics() {
     const pending =
         allAdmissions.filter(
             admission =>
-                admission.status === "pending"
+                normalizeStatus(
+                    admission.status
+                ) === "pending"
         ).length;
 
 
     const approved =
         allAdmissions.filter(
             admission =>
-                admission.status === "approved"
+                normalizeStatus(
+                    admission.status
+                ) === "approved"
         ).length;
 
 
-    if (totalAdmissions)
+    if (totalAdmissions) {
+
         totalAdmissions.textContent =
             total;
 
+    }
 
-    if (pendingAdmissions)
+
+    if (pendingAdmissions) {
+
         pendingAdmissions.textContent =
             pending;
 
+    }
 
-    if (approvedAdmissions)
+
+    if (pendingAdmissionsMini) {
+
+        pendingAdmissionsMini.textContent =
+            pending;
+
+    }
+
+
+    if (approvedAdmissions) {
+
         approvedAdmissions.textContent =
             approved;
+
+    }
 
 }
 
@@ -779,9 +997,7 @@ function updateAdmissionStatistics() {
 // RENDER ADMISSIONS
 // ==================================================
 
-function renderAdmissions(
-    admissions
-) {
+function renderAdmissions(admissions) {
 
     if (!admissionTableBody)
         return;
@@ -801,9 +1017,11 @@ function renderAdmissions(
     }
 
 
-    // Show latest 10 applications
     const latestAdmissions =
-        admissions.slice(0, 10);
+        admissions.slice(
+            0,
+            10
+        );
 
 
     admissionTableBody.innerHTML =
@@ -811,42 +1029,31 @@ function renderAdmissions(
             .map(admission => {
 
                 const status =
-                    admission.status ||
-                    "pending";
+                    normalizeStatus(
+                        admission.status
+                    );
 
 
-                let statusClass =
-                    "pending";
+                const validStatusClasses = [
+                    "pending",
+                    "approved",
+                    "rejected",
+                    "contacted"
+                ];
 
 
-                if (
-                    status === "approved"
-                ) {
-
-                    statusClass =
-                        "approved";
-
-                }
+                const statusClass =
+                    validStatusClasses.includes(
+                        status
+                    )
+                        ? status
+                        : "pending";
 
 
-                if (
-                    status === "rejected"
-                ) {
-
-                    statusClass =
-                        "rejected";
-
-                }
-
-
-                if (
-                    status === "contacted"
-                ) {
-
-                    statusClass =
-                        "contacted";
-
-                }
+                const studentName =
+                    admission.student_name ||
+                    admission.full_name ||
+                    "-";
 
 
                 return `
@@ -855,25 +1062,28 @@ function renderAdmissions(
 
                         <td>
                             ${escapeHTML(
-                                admission.student_name || "-"
+                                studentName
                             )}
                         </td>
 
                         <td>
                             ${escapeHTML(
-                                admission.phone || "-"
+                                admission.phone ||
+                                "-"
                             )}
                         </td>
 
                         <td>
                             ${escapeHTML(
-                                admission.class_name || "-"
+                                admission.class_name ||
+                                "-"
                             )}
                         </td>
 
                         <td>
                             ${escapeHTML(
-                                admission.course || "-"
+                                admission.course ||
+                                "-"
                             )}
                         </td>
 
@@ -882,7 +1092,9 @@ function renderAdmissions(
                             <span
                                 class="status ${statusClass}"
                             >
-                                ${status.toUpperCase()}
+                                ${escapeHTML(
+                                    status.toUpperCase()
+                                )}
                             </span>
 
                         </td>
@@ -936,10 +1148,16 @@ function viewAdmission(
     }
 
 
+    const studentName =
+        admission.student_name ||
+        admission.full_name ||
+        "-";
+
+
     const message = `
 
 Student Name:
-${admission.student_name || "-"}
+${studentName}
 
 Father Name:
 ${admission.father_name || "-"}
@@ -973,6 +1191,274 @@ ${admission.status || "pending"}
 }
 
 
+window.viewAdmission =
+    viewAdmission;
+
+
+// ==================================================
+// EXTRA DASHBOARD METRICS
+// ==================================================
+
+async function countTableRows(
+    tableName
+) {
+
+    const {
+        count,
+        error
+    } =
+        await supabaseClient
+            .from(tableName)
+            .select(
+                "*",
+                {
+                    count: "exact",
+                    head: true
+                }
+            );
+
+
+    if (error) {
+        throw error;
+    }
+
+
+    return count || 0;
+}
+
+
+async function countTodayAttendance() {
+
+    const {
+        count,
+        error
+    } =
+        await supabaseClient
+            .from("attendance")
+            .select(
+                "*",
+                {
+                    count: "exact",
+                    head: true
+                }
+            )
+            .eq(
+                "attendance_date",
+                formatTodayForDatabase()
+            );
+
+
+    if (error) {
+        throw error;
+    }
+
+
+    return count || 0;
+}
+
+
+function setMetric(
+    element,
+    value
+) {
+
+    if (!element)
+        return;
+
+
+    element.textContent =
+        Number.isFinite(value)
+            ? value
+            : 0;
+}
+
+
+async function loadDashboardMetrics() {
+
+    const metricJobs = [
+
+        {
+            key: "assignments",
+
+            element:
+                totalAssignments,
+
+            job: () =>
+                countTableRows(
+                    "assignments"
+                )
+        },
+
+
+        {
+            key: "attendance",
+
+            element:
+                todayAttendance,
+
+            job: () =>
+                countTodayAttendance()
+        },
+
+
+        {
+            key: "fees",
+
+            element:
+                totalFeesRecords,
+
+            job: () =>
+                countTableRows(
+                    "fees"
+                )
+        },
+
+
+        {
+            key: "materials",
+
+            element:
+                totalMaterials,
+
+            job: () =>
+                countTableRows(
+                    "study_materials"
+                )
+        },
+
+
+        {
+            key: "notices",
+
+            element:
+                totalNotices,
+
+            job: () =>
+                countTableRows(
+                    "notices"
+                )
+        }
+
+    ];
+
+
+    const results =
+        await Promise.allSettled(
+            metricJobs.map(
+                item =>
+                    item.job()
+            )
+        );
+
+
+    results.forEach(
+        (
+            result,
+            index
+        ) => {
+
+            const item =
+                metricJobs[index];
+
+
+            if (
+                result.status ===
+                "fulfilled"
+            ) {
+
+                setMetric(
+                    item.element,
+                    result.value
+                );
+
+            }
+
+            else {
+
+                console.warn(
+                    `Dashboard metric "${item.key}" could not load:`,
+                    result.reason
+                );
+
+                setMetric(
+                    item.element,
+                    0
+                );
+
+            }
+
+        }
+    );
+
+}
+
+
+// ==================================================
+// REFRESH DASHBOARD
+// ==================================================
+
+async function refreshDashboard() {
+
+    hideAdminError();
+
+
+    if (refreshBtn) {
+
+        refreshBtn.disabled =
+            true;
+
+        refreshBtn.textContent =
+            "Refreshing...";
+
+    }
+
+
+    try {
+
+        await Promise.all([
+
+            loadStudents(),
+
+            loadAdmissions(),
+
+            loadDashboardMetrics()
+
+        ]);
+
+
+        showToast(
+            "Dashboard refreshed."
+        );
+
+    }
+
+    finally {
+
+        if (refreshBtn) {
+
+            refreshBtn.disabled =
+                false;
+
+            refreshBtn.textContent =
+                "↻ Refresh";
+
+        }
+
+    }
+
+}
+
+
+if (refreshBtn) {
+
+    refreshBtn.addEventListener(
+        "click",
+        refreshDashboard
+    );
+
+}
+
+
 // ==================================================
 // LOGOUT
 // ==================================================
@@ -993,50 +1479,23 @@ if (logoutBtn) {
                 return;
 
 
-            await supabaseClient.auth.signOut();
+            try {
 
+                await supabaseClient
+                    .auth
+                    .signOut();
 
-            window.location.href =
-                "../login.html";
+            }
+
+            finally {
+
+                window.location.href =
+                    "../login.html";
+
+            }
 
         }
     );
-
-}
-
-
-// ==================================================
-// HTML ESCAPE
-// ==================================================
-
-function escapeHTML(value) {
-
-    return String(value)
-
-        .replaceAll(
-            "&",
-            "&amp;"
-        )
-
-        .replaceAll(
-            "<",
-            "&lt;"
-        )
-
-        .replaceAll(
-            ">",
-            "&gt;"
-        )
-
-        .replaceAll(
-            '"',
-            "&quot;"
-        )
-
-        .replaceAll(
-            "'",
-            "&#039;"
-        );
 
 }
 
@@ -1047,21 +1506,29 @@ function escapeHTML(value) {
 
 (async function initAdminDashboard() {
 
+    setCurrentDate();
+
+
     const isAdmin =
         await checkAdmin();
 
 
     if (!isAdmin) {
-
         return;
-
     }
 
 
-    // Load both sections
+    hideAdminError();
+
+
     await Promise.all([
+
         loadStudents(),
-        loadAdmissions()
+
+        loadAdmissions(),
+
+        loadDashboardMetrics()
+
     ]);
 
 })();
