@@ -5,7 +5,6 @@
 
 // 1. Supabase Dashboard se Project URL paste karo
 const SUPABASE_URL = "https://vzejqtawmpnuonddytkv.supabase.co";
-
 // 2. Supabase Dashboard → Settings → API Keys
 //    → Publishable key → default
 const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_IcGhbWXSWE33OmyKysPLqw_5lJz0v2U";
