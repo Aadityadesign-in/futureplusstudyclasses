@@ -1,24 +1,31 @@
 {
+  "id": "./",
   "name": "Future Plus Study Classes",
   "short_name": "Future Plus",
   "description": "Future Plus Study Classes - Student and Coaching Management App",
+
   "start_url": "./index.html",
   "scope": "./",
-  "id": "./",
+
   "display": "standalone",
   "display_override": [
-    "window-controls-overlay",
     "standalone"
   ],
+
   "orientation": "portrait-primary",
+
   "background_color": "#f8fafc",
   "theme_color": "#2563eb",
+
   "lang": "hi-IN",
-  "dir": "ltr",
+
   "categories": [
     "education",
     "productivity"
   ],
+
+  "prefer_related_applications": false,
+
   "icons": [
     {
       "src": "./assets/images/icon-192.png",
@@ -31,12 +38,51 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
+    }
+  ],
+
+  "screenshots": [
+    {
+      "src": "./assets/screenshots/home-mobile.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Future Plus Study Classes home page"
     },
     {
-      "src": "./assets/images/icon-512.png",
-      "sizes": "512x512",
+      "src": "./assets/screenshots/student-mobile.png",
+      "sizes": "1080x1920",
       "type": "image/png",
-      "purpose": "maskable"
+      "form_factor": "narrow",
+      "label": "Student dashboard"
+    },
+    {
+      "src": "./assets/screenshots/home-desktop.png",
+      "sizes": "1366x768",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Future Plus Study Classes desktop home page"
+    }
+  ],
+
+  "shortcuts": [
+    {
+      "name": "Student Login",
+      "short_name": "Login",
+      "description": "Open student login",
+      "url": "./login.html"
+    },
+    {
+      "name": "Student Dashboard",
+      "short_name": "Dashboard",
+      "description": "Open student dashboard",
+      "url": "./student/dashboard.html"
+    },
+    {
+      "name": "Admission",
+      "short_name": "Admission",
+      "description": "Open admission form",
+      "url": "./admission.html"
     }
   ]
 }
