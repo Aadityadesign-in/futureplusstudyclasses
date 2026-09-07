@@ -490,7 +490,45 @@
 
 <script src="../assets/js/attendance-admin.js"></script>
 
+<script>
+if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+        navigator.serviceWorker.register("../service-worker.js")
+            .then(reg => {
+                console.log("PWA Ready:", reg.scope);
+            })
+            .catch(err => {
+                console.error("PWA Error:", err);
+            });
+    });
+}
+</script>
+
+<script>
+if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+        navigator.serviceWorker
+            .register("../service-worker.js")
+            .then(registration => {
+                console.log(
+                    "Service Worker registered:",
+                    registration.scope
+                );
+            })
+            .catch(error => {
+                console.error(
+                    "Service Worker registration failed:",
+                    error
+                );
+            });
+    });
+}
+</script>
 
 </body>
 
 </html>
+<head>
+    <link rel="manifest" href="../manifest.json">
+<meta name="theme-color" content="#2563eb">
+</head>
