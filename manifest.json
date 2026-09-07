@@ -3,29 +3,16 @@
   "name": "Future Plus Study Classes",
   "short_name": "Future Plus",
   "description": "Future Plus Study Classes - Student and Coaching Management App",
-
   "start_url": "./index.html",
   "scope": "./",
-
   "display": "standalone",
-  "display_override": [
-    "standalone"
-  ],
-
+  "display_override": ["standalone"],
   "orientation": "portrait-primary",
-
   "background_color": "#f8fafc",
   "theme_color": "#2563eb",
-
   "lang": "hi-IN",
-
-  "categories": [
-    "education",
-    "productivity"
-  ],
-
+  "categories": ["education", "productivity"],
   "prefer_related_applications": false,
-
   "icons": [
     {
       "src": "./assets/images/icon-192.png",
@@ -40,31 +27,6 @@
       "purpose": "any"
     }
   ],
-
-  "screenshots": [
-    {
-      "src": "./assets/screenshots/home-mobile.png",
-      "sizes": "1080x1920",
-      "type": "image/png",
-      "form_factor": "narrow",
-      "label": "Future Plus Study Classes home page"
-    },
-    {
-      "src": "./assets/screenshots/student-mobile.png",
-      "sizes": "1080x1920",
-      "type": "image/png",
-      "form_factor": "narrow",
-      "label": "Student dashboard"
-    },
-    {
-      "src": "./assets/screenshots/home-desktop.png",
-      "sizes": "1366x768",
-      "type": "image/png",
-      "form_factor": "wide",
-      "label": "Future Plus Study Classes desktop home page"
-    }
-  ],
-
   "shortcuts": [
     {
       "name": "Student Login",
